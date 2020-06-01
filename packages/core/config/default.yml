@@ -1,0 +1,5 @@
+cli: 'cenk1cenk2'
+loglevel: module
+configDir: '.config/cenk1cenk2'
+localConfig: '.cenk1cenk2.local.yml'
+lock: '.cenk1cenk2.lock'
