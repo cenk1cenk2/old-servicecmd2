@@ -3,14 +3,12 @@
   "private": true,
   "repository": "https://github.com/cenk1cenk2/servicecmd",
   "scripts": {
-    "init-env": "yarn bootstrap",
-    "dev:init-env": "yarn bootstrap",
+    "ls": "lerna la",
+    "bootstrap": "lerna bootstrap ${ARGS} --scope ${PACKAGE:-''} --",
+    "rimraf": "rimraf node_modules && lerna clean --scope ${PACKAGE:-''} -y",
     "release": "lerna --conventional-commits --create-release github",
     "command": "lerna exec --scope ${PACKAGE:-''} --stream --no-bail --parallel",
-    "bootstrap": "lerna bootstrap ${ARGS} --scope ${PACKAGE:-''} --",
-    "link-packages": "lerna link --force-local",
-    "ls": "lerna la",
-    "rimraf": "rimraf node_modules && lerna clean --scope ${PACKAGE:-''} -y"
+    "link-packages": "lerna link --force-local"
   },
   "workspaces": [
     "packages/*"
