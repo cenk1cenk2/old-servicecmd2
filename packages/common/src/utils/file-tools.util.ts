@@ -17,7 +17,8 @@ export async function promptOverwrite (file: string): Promise<void> {
   }
 
   // get prompt for overwrite
-  const reply = await createPrompt('Toggle', {
+  const reply = await createPrompt({
+    type: 'Toggle',
     message: `"${file}" already exists. Do you want to overwrite?`,
     enabled: 'Overwrite',
     disabled: 'Cancel'
@@ -39,7 +40,8 @@ export async function tasksOverwritePrompt (file: string, task: ListrTaskWrapper
   }
 
   // get prompt for overwrite
-  const reply = await task.prompt<boolean>('Toggle', {
+  const reply = await task.prompt<boolean>({
+    type: 'Toggle',
     message: `"${file}" already exists. Do you want to overwrite?`,
     enabled: 'Overwrite',
     disabled: 'Cancel'

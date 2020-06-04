@@ -12,19 +12,11 @@ module.exports = {
             group: 'index'
           },
           {
-            pattern: '@commands/**',
-            group: 'index'
-          },
-          {
             pattern: '@helpers/**',
             group: 'index'
           },
           {
             pattern: '@interfaces/**',
-            group: 'index'
-          },
-          {
-            pattern: '@context/**',
             group: 'index'
           },
           {

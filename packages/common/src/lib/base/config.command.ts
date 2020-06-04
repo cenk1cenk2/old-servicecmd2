@@ -1,7 +1,7 @@
 import { BaseCommand } from './base.command'
 import { Locker } from '@extend/locker'
 import { ObjectLiteral } from '@interfaces/object-literal.interface'
-import { createTable, mergeObjects } from '@utils/custom.util'
+import { mergeObjects } from '@utils/custom.util'
 import { checkExists, deleteFile, readFile } from '@utils/file-tools.util'
 import { promptUser } from '@utils/prompt.util'
 
@@ -28,8 +28,9 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     }
 
     // prompt user for the action
-    const response: string = await promptUser('Select', {
-      message: 'What do you want to do with the skeleton config?',
+    const response: string = await promptUser({
+      type: 'Select',
+      message: 'Please select what to do with this configuration.',
       choices
     })
 
@@ -51,8 +52,6 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     } else if (this.configType === 'local') {
       await this.configLock.lock([ { data: desiredConfig, merge: true } ])
     }
-
-    this.logger.module('New configurations added to the file.')
   }
 
   // @ts-ignore
@@ -70,8 +69,6 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     } else if (this.configType === 'local') {
       await this.configLock.lock([ { data: editedConfig } ])
     }
-
-    this.logger.module('Editted config file.')
   }
 
   // @ts-ignore
@@ -93,7 +90,8 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     }
 
     // get prompts for which one to remote
-    const userInput: string[] = await promptUser('MultiSelect', {
+    const userInput: string[] = await promptUser({
+      type: 'MultiSelect',
       message: 'Please select configuration to delete. [space to select, a to select all]',
       choices: Object.keys(config)
     })
@@ -125,26 +123,18 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     const { local, config } = await this.getConfig(this.configName)
 
     if (this.configType === 'general') {
-      this.logger.info(`Current configuration file is "${local ? 'local' : 'from module'}".`)
-
       if (!local) {
         this.logger.warn('Use add to start with predefined local configuration or reset to start with empty local configuration that is editable through menu.')
       }
     }
 
-    if (Object.keys(config).length > 0) {
-      this.logger.info(createTable([ 'Entry', 'Value' ], Object.entries(config)))
-    } else {
-      this.logger.warn('Configuration file is empty.')
-    }
-
-    this.logger.module('Configuration file is listed.')
+    this.configShow(config)
   }
 
   // @ts-ignore
   private async importConfig (): Promise<void> {
     const userInput: { importPath?: string, merge?: boolean } = {}
-    userInput.importPath = await promptUser('Input', { message: 'Enter the path you want to import from:' })
+    userInput.importPath = await promptUser({ type: 'Input', message: 'Enter the path you want to import from:' })
 
     if (!checkExists(userInput.importPath)) {
       this.logger.fail(`Import file can not be found at path "${userInput.importPath}".`)
@@ -154,7 +144,8 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     const { local, config } = await this.getConfig(this.configName)
 
     if (local && Object.keys(config)?.length > 0) {
-      userInput.merge = await promptUser('Toggle', {
+      userInput.merge = await promptUser({
+        type: 'Toggle',
         message: 'Do you want to merge with the current configuration file?',
         enabled: 'Merge',
         disabled: 'Import directly'
@@ -202,10 +193,21 @@ export abstract class ConfigBaseCommand extends BaseCommand {
     if (this.configType === 'general') {
       await this.resetConfig(this.configName)
     }
+
+    let path: string
+
+    if (this.configType === 'general') {
+      ({ path } = await this.getConfig(this.configName))
+    } else if (this.configType === 'local') {
+      path = this.configLock.getLockPath()
+    }
+
+    this.logger.module(`Initiated local config file at "${path}".`)
   }
 
-  // @review: configFileType
   abstract configAdd(configFile: ObjectLiteral): Promise<ObjectLiteral>
 
   abstract configEdit(configFile: ObjectLiteral): Promise<ObjectLiteral>
+
+  abstract configShow(configFile: ObjectLiteral): Promise<void>
 }

@@ -6,10 +6,8 @@
     "baseUrl": "src",
     "paths": {
       "@src/*": ["*"],
-      "@commands/*": ["commands/*"],
       "@helpers/*": ["helpers/*"],
       "@interfaces/*": ["interfaces/*"],
-      "@context/*": ["interfaces/commands/*"],
       "@lib/*": ["lib/*"],
       "@base/*": ["lib/base/*"],
       "@extend/*": ["lib/extend/*"],

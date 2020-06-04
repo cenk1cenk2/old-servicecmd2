@@ -1,23 +1,51 @@
-import { flags } from '@oclif/command'
+import { flags as Flags } from '@oclif/command'
+import { args as Args } from '@oclif/parser'
 import { BaseCommand } from '@servicecmd/common'
+import globby from 'globby'
+import { Readable } from 'stream'
+
+interface Ctx {
+  items: string[]
+  scanStream: Readable
+}
 
 export default class DockerCommand extends BaseCommand {
   static description = 'describe the command here'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    force: flags.boolean({ char: 'f' })
+    help: Flags.help({ char: 'h' }),
+    force: Flags.boolean({ char: 'f' })
   }
 
-  static args = [
+  static args: Args.Input = [
     {
-      name: 'command', required: true, description: 'asd'
+      name: 'command',
+      description: 'asd',
+      options: [ 'start', 'stop' ]
     }
   ]
 
   async run (): Promise<void> {
-    const { args, flags } = this.parse()
+    const { args, flags } = this.parse(DockerCommand)
 
-    this.logger.module('Hello all.')
+    this.tasks.add<Ctx>([
+      {
+        title: 'Scanning for services.',
+        task: async (ctx, task): Promise<NodeJS.ReadableStream> => {
+          ctx.items = []
+          return globby.stream('**/docker-compose.yml', { cwd: '/root/programs/docker', deep: Infinity }).on('data', (data) => {
+            ctx.items = [ ...ctx.items, data ]
+          })
+        },
+        options: {}
+      },
+
+      {
+        title: 'Found services.',
+        task: (ctx, task): void => {
+          task.title = ctx.items.toString()
+        }
+      }
+    ])
   }
 }

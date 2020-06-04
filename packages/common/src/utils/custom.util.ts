@@ -72,6 +72,12 @@ export function removeObjectOtherKeys (target: ObjectLiteral, source: ObjectLite
 export function createTable (headers: string[], data: string[][]): table {
   data.unshift(headers)
 
+  data = data.map((row) =>
+    row.reduce((o, column) => {
+      return [ ...o, column.toString() ]
+    }, [])
+  )
+
   return table(data, { border: getBorderCharacters('norc') })
 }
 

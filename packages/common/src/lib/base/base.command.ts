@@ -16,10 +16,9 @@ import { checkExists, createDirIfNotExists, readFile, writeFile } from '@utils/f
 export class BaseCommand extends Command {
   public logger: ILogger
   public constants: ObjectLiteralString
-  public tasks: Manager<any, this['renderer']>
+  public tasks: Manager<any, 'default'>
   public shortId: string
   public locker: Locker = new Locker(this.id)
-  public renderer: ListrRendererValue = this.getListrRenderer()
 
   /** Every command needs to implement run for running the command itself. */
   // make run non-abstract for other classes
@@ -36,10 +35,7 @@ export class BaseCommand extends Command {
     this.logger = Logger.prototype.getInstance(this.shortId)
     this.config.configDir = path.join(this.config.home, config.get('configDir'))
     // initiate manager
-    this.tasks = new Manager<any, this['renderer']>({ renderer: this.renderer })
-
-    // Greet
-    this.logger.module(`Executing ${this.id.toUpperCase()} command.`)
+    this.tasks = new Manager({ renderer: this.getListrRenderer() as 'default' })
   }
 
   /** Tasks to run before end of the command. */
