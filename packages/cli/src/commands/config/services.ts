@@ -15,15 +15,20 @@ export default class ConfigCommand extends ConfigBaseCommand {
       message: 'Please provide the details for service.',
       choices: [
         {
-          name: 'path', message: 'Path', required: true
+          name: 'path',
+          message: 'Path',
+          required: true
         },
         {
-          name: 'name', message: 'Name'
+          name: 'name',
+          message: 'Name'
         }
       ],
       // FIXME: fix this later with the types on listr2
       // @ts-ignore
-      footer: chalk.italic.dim('Path can be a absolute value, relative to default directory or a regular expression. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'),
+      footer: chalk.italic.dim(
+        'Path can be a absolute value, relative to default directory or a regular expression. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
+      ),
       validate: (value) => this.validate(config, value) as Promise<string>,
       result: (value) => this.result(config, value)
     })
@@ -125,7 +130,6 @@ export default class ConfigCommand extends ConfigBaseCommand {
     if (regex) {
       response.regex = true
     } else {
-
     }
 
     // abort mission on certain occasions, and return the prompt on the valid ones
