@@ -22,7 +22,7 @@
     "release": "yarn lint && yarn readme",
     "readme": "yarn oclif-dev readme",
     "oclif": "oclif $command",
-    "oclif-dev": "node -r tsconfig-paths/register node_modules/@oclif/dev-cli/bin/run",
+    "oclif-dev": "node -r tsconfig-paths/register ../../node_modules/@oclif/dev-cli/bin/run",
     "test": "NODE_ENV=test jest --forceExit --runInBand --config ./tests/jest.js",
     "test:cov": "NODE_ENV=test jest --coverage --config ./tests/jest.js",
     "dev:test": "NODE_ENV=test jest --verbose --runInBand --forceExit --watchAll --config ./tests/jest.js"
@@ -71,6 +71,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@cenk1cenk2/boilerplate-oclif": "^1.0.1",
     "@oclif/command": "^1.6.1",
     "@oclif/config": "^1.15.1",
     "@oclif/errors": "^1.2.2",

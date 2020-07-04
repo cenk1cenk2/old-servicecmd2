@@ -1,4 +1,4 @@
-import { ConfigBaseCommand, promptUser, createTable } from '@servicecmd/common'
+import { ConfigBaseCommand, promptUser, createTable } from '@cenk1cenk2/boilerplate-oclif'
 import chalk from 'chalk'
 
 import { ServiceConfig, ServiceProperties } from '@context/config/services.interface'
