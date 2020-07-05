@@ -29,8 +29,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn readme && lint-staged",
-      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+      "pre-commit": "yarn readme && lint-staged"
     }
   },
   "lint-staged": {

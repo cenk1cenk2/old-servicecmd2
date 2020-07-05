@@ -1,7 +1,12 @@
 export type ServiceConfig = Record<string, ServiceProperties>
 
-export interface ServiceProperties {
+export interface ServicePrompt {
   path: string
   name: string
-  regex: boolean
+}
+
+export type ServiceProperties = {
+  name: string
+  path: string[]
+  regex: false | number
 }

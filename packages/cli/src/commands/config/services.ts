@@ -1,7 +1,7 @@
 import { ConfigBaseCommand, promptUser, createTable } from '@cenk1cenk2/boilerplate-oclif'
 import chalk from 'chalk'
 
-import { ServiceConfig, ServiceProperties } from '@context/config/services.interface'
+import { ServiceConfig, ServiceProperties, ServicePrompt } from '@context/config/services.interface'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = 'Edit services that is managed by this CLI.'
@@ -27,7 +27,8 @@ export default class ConfigCommand extends ConfigBaseCommand {
       // FIXME: fix this later with the types on listr2
       // @ts-ignore
       footer: chalk.italic.dim(
-        'Path can be a absolute value, relative to default directory or a regular expression. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
+        // eslint-disable-next-line max-len
+        'Path can be a absolute value, relative to default directory or a regular expression. Regular expressions can be in gitignore format seperated by colons. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
       ),
       validate: (value) => this.validate(config, value) as Promise<string>,
       result: (value) => this.result(config, value)
@@ -89,7 +90,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
         createTable(
           [ 'Name', 'Path' ],
           Object.values(config).reduce((o, entry) => {
-            return [ ...o, [ entry.name, entry.path ] ]
+            return [ ...o, [ entry.name, entry.path.toString() ] ]
           }, [])
         )
       )
@@ -103,33 +104,38 @@ export default class ConfigCommand extends ConfigBaseCommand {
     return true
   }
 
-  private async result (config: ServiceConfig, response: ServiceProperties): Promise<ServiceProperties> {
+  private async result (config: ServiceConfig, prompt: ServicePrompt): Promise<ServiceProperties> {
+    const response = {} as ServiceProperties
+
     // initiate empty names as their paths
-    if (response.name === '') {
-      response.name = response.path
-      this.logger.warn(`Name was empty for "${response.name}", initiated it as "${response.path}".`)
+    if (prompt.name === '') {
+      response.name = prompt.path
+      this.logger.warn(`Name was empty for service, initiated it as "${prompt.path}".`)
     }
 
     // if item with given name already exists prompt first
     let overwritePrompt = true
-
     if (config?.[response?.name]) {
-      overwritePrompt = await promptUser<boolean>({ type: 'Toggle', message: `Name "${response?.path}" already exists in local configuration. Do you want to overwrite?` })
+      overwritePrompt = await promptUser<boolean>({ type: 'Toggle', message: `Name "${response.name}" already exists in local configuration. Do you want to overwrite?` })
     }
 
-    // check if path already exists
-
-    // check if given path is regex
-    const regex = await promptUser<boolean>({
-      type: 'Toggle',
-      message: `Path "${response?.path}" seems to be a regular expression. Do you want to scan for it now or scan for new files each run?`,
-      enabled: 'Dynamic',
-      disabled: 'Static'
-    })
-
-    if (regex) {
-      response.regex = true
+    // check if regular expression
+    if (new RegExp(/[!*?{}]/g).test(prompt.path)) {
+      response.path = prompt.path.split(':')
+      response.regex = parseInt(await promptUser<string>({
+        type: 'Input',
+        message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
+        initial: '1',
+        validate: (value): boolean | string => {
+          if (parseInt(value, 10) && parseInt(value, 10) > 0) {
+            return true
+          } else {
+            return 'Search depth must be a positive number.'
+          }
+        }
+      }), 10)
     } else {
+      response.path = [ prompt.path ]
     }
 
     // abort mission on certain occasions, and return the prompt on the valid ones

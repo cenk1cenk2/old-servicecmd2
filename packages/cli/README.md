@@ -26,11 +26,11 @@ While developing you must use `export TS_NODE=1` environment variable, since I d
 
 <!-- usage -->
 ```sh-session
-$ npm install -g @cenk1cenk2/oclif-boilerplate
+$ npm install -g @servicecmd/cli
 $ cenk1cenk2 COMMAND
 running command...
 $ cenk1cenk2 (-v|--version|version)
-@cenk1cenk2/oclif-boilerplate/0.0.0 linux-x64 node-v13.12.0
+@servicecmd/cli/0.0.1 linux-x64 node-v13.12.0
 $ cenk1cenk2 --help [COMMAND]
 USAGE
   $ cenk1cenk2 COMMAND
@@ -41,31 +41,38 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`cenk1cenk2 config`](#cenk1cenk2-config)
-* [`cenk1cenk2 empty [FILE]`](#cenk1cenk2-empty-file)
+* [`cenk1cenk2 config:services`](#cenk1cenk2-configservices)
+* [`cenk1cenk2 docker [COMMAND]`](#cenk1cenk2-docker-command)
 * [`cenk1cenk2 help [COMMAND]`](#cenk1cenk2-help-command)
 
-## `cenk1cenk2 config`
+## `cenk1cenk2 config:services`
 
-Various ways to edit default configuration.
+Edit services that is managed by this CLI.
 
 ```
 USAGE
-  $ cenk1cenk2 config
+  $ cenk1cenk2 config:services
 ```
 
-## `cenk1cenk2 empty [FILE]`
+_See code: [dist/commands/config/services.ts](https://github.com/cenk1cenk2/servicecmd/blob/v0.0.1/dist/commands/config/services.ts)_
+
+## `cenk1cenk2 docker [COMMAND]`
 
 describe the command here
 
 ```
 USAGE
-  $ cenk1cenk2 empty [FILE]
+  $ cenk1cenk2 docker [COMMAND]
+
+ARGUMENTS
+  COMMAND  (start|stop) asd
 
 OPTIONS
   -f, --force
   -h, --help   show CLI help
 ```
+
+_See code: [dist/commands/docker/index.ts](https://github.com/cenk1cenk2/servicecmd/blob/v0.0.1/dist/commands/docker/index.ts)_
 
 ## `cenk1cenk2 help [COMMAND]`
 
@@ -82,5 +89,5 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.0.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.1.0/src/commands/help.ts)_
 <!-- commandsstop -->

@@ -1,6 +1,6 @@
+import { BaseCommand } from '@cenk1cenk2/boilerplate-oclif'
 import { flags as Flags } from '@oclif/command'
 import { args as Args } from '@oclif/parser'
-import { BaseCommand } from '@cenk1cenk2/boilerplate-oclif'
 import globby from 'globby'
 import { Readable } from 'stream'
 
