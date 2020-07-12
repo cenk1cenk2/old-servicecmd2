@@ -12,7 +12,7 @@ interface Ctx {
 export default class DockerCommand extends BaseCommand {
   static description = 'describe the command here'
 
-  static flags = {
+  static flags: any = {
     help: Flags.help({ char: 'h' }),
     force: Flags.boolean({ char: 'f' })
   }

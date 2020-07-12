@@ -1,4 +1,4 @@
-import { ConfigBaseCommand, promptUser, createTable } from '@cenk1cenk2/boilerplate-oclif'
+import { ConfigBaseCommand, promptUser, createTable, IConfigRemove } from '@cenk1cenk2/boilerplate-oclif'
 import chalk from 'chalk'
 
 import { ServiceConfig, ServiceProperties, ServicePrompt } from '@context/config/services.interface'
@@ -97,6 +97,21 @@ export default class ConfigCommand extends ConfigBaseCommand {
       this.logger.module('Configuration file is listed.')
     } else {
       this.logger.warn('Configuration file is empty.')
+    }
+  }
+
+  public async configRemove (config: ServiceConfig): Promise<IConfigRemove<ServiceConfig>> {
+    return {
+      keys: Object.keys(config),
+      removeFunction: async (config: ServiceConfig, userInput: string[]): Promise<ServiceConfig> => {
+        let desiredConfig: ServiceConfig
+        userInput.forEach((entry) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+          const { [entry]: omit, ...rest } = config
+          desiredConfig = rest
+        })
+        return desiredConfig
+      }
     }
   }
 
