@@ -1,7 +1,7 @@
-import { ConfigBaseCommand, promptUser, createTable, IConfigRemove } from '@cenk1cenk2/boilerplate-oclif'
+import { ConfigBaseCommand, createTable, IConfigRemove, promptUser } from '@cenk1cenk2/boilerplate-oclif'
 import chalk from 'chalk'
 
-import { ServiceConfig, ServiceProperties, ServicePrompt } from '@context/config/services.interface'
+import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = 'Edit services that is managed by this CLI.'
@@ -10,29 +10,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
 
   async configAdd (config: ServiceConfig): Promise<ServiceConfig> {
     // prompt user for details
-    const response = await promptUser<ServiceProperties>({
-      type: 'Form',
-      message: 'Please provide the details for service.',
-      choices: [
-        {
-          name: 'path',
-          message: 'Path',
-          required: true
-        },
-        {
-          name: 'name',
-          message: 'Name'
-        }
-      ],
-      // FIXME: fix this later with the types on listr2
-      // @ts-ignore
-      footer: chalk.italic.dim(
-        // eslint-disable-next-line max-len
-        'Path can be a absolute value, relative to default directory or a regular expression. Regular expressions can be in gitignore format seperated by colons. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
-      ),
-      validate: (value) => this.validate(config, value) as Promise<string>,
-      result: (value) => this.result(config, value)
-    })
+    const response = await promptUser<ServiceProperties>(this.prompt(config))
 
     if (response) {
       config[response?.name] = Object.keys(response).reduce((o, key) => {
@@ -49,29 +27,12 @@ export default class ConfigCommand extends ConfigBaseCommand {
   async configEdit (config: ServiceConfig): Promise<ServiceConfig> {
     // prompt user for which keys to edit
     const select = await promptUser({
-      type: 'Select',
+      type: 'AutoComplete',
       message: 'Please select configuration to edit.',
       choices: Object.keys(config)
     })
 
-    const edit = await promptUser({
-      type: 'Form',
-      message: 'Please provide the details for repository below.',
-      choices: [
-        {
-          name: 'value',
-          message: 'Repository',
-          initial: config[select]
-        },
-        {
-          name: 'name',
-          message: 'Name',
-          initial: select
-        }
-      ],
-      validate: (value) => this.validate(config, value) as Promise<string>,
-      result: (value) => this.result(config, value)
-    })
+    const edit = await promptUser(this.prompt(config))
 
     // strip old item
     // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
@@ -115,6 +76,33 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
   }
 
+  private prompt (config: ServiceConfig): any {
+    return {
+      type: 'Form',
+      message: 'Please provide the details for service.',
+      choices: [
+        {
+          name: 'path',
+          message: 'Path',
+          initial: 'asd',
+          required: true
+        },
+        {
+          name: 'name',
+          message: 'Name'
+        }
+      ],
+      // FIXME: fix this later with the types on listr2
+      // @ts-ignore
+      footer: chalk.italic.dim(
+        // eslint-disable-next-line max-len
+        'Path can be a absolute value, relative to default directory or a regular expression. Regular expressions can be in gitignore format seperated by colons. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
+      ),
+      validate: (value): Promise<string | boolean> => this.validate(config, value),
+      result: (value): Promise<ServiceProperties> => this.result(config, value)
+    }
+  }
+
   private async validate (config: ServiceConfig, response: ServiceProperties): Promise<boolean | string> {
     return true
   }
@@ -124,12 +112,13 @@ export default class ConfigCommand extends ConfigBaseCommand {
 
     // initiate empty names as their paths
     if (prompt.name === '') {
-      response.name = prompt.path
       this.logger.warn(`Name was empty for service, initiated it as "${prompt.path}".`)
+
+      response.name = prompt.path
     }
 
     // if item with given name already exists prompt first
-    let overwritePrompt = true
+    let overwritePrompt: boolean
     if (config?.[response?.name]) {
       overwritePrompt = await promptUser<boolean>({ type: 'Toggle', message: `Name "${response.name}" already exists in local configuration. Do you want to overwrite?` })
     }
@@ -137,24 +126,27 @@ export default class ConfigCommand extends ConfigBaseCommand {
     // check if regular expression
     if (new RegExp(/[!*?{}]/g).test(prompt.path)) {
       response.path = prompt.path.split(':')
-      response.regex = parseInt(await promptUser<string>({
-        type: 'Input',
-        message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
-        initial: '1',
-        validate: (value): boolean | string => {
-          if (parseInt(value, 10) && parseInt(value, 10) > 0) {
-            return true
-          } else {
-            return 'Search depth must be a positive number.'
+      response.regex = parseInt(
+        await promptUser<string>({
+          type: 'Input',
+          message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
+          initial: '1',
+          validate: (value): boolean | string => {
+            if (parseInt(value, 10) && parseInt(value, 10) > 0) {
+              return true
+            } else {
+              return 'Search depth must be a positive number.'
+            }
           }
-        }
-      }), 10)
+        }),
+        10
+      )
     } else {
       response.path = [ prompt.path ]
     }
 
     // abort mission on certain occasions, and return the prompt on the valid ones
-    if (overwritePrompt) {
+    if (overwritePrompt ?? true) {
       return response
     } else {
       return
