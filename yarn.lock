@@ -264,10 +264,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.0.6.tgz#2b282da74e49be9333ad0f552ec94c0766240fcd"
-  integrity sha512-j9FYwS38hbnAxXvyQ8UoB5beozDXt1u0twKzNUYmUjzYBHs9TkAnMX0Rg7BS2BaDhOiCeRLAXAt/TnP19tFhbg==
+"@cenk1cenk2/boilerplate-oclif@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.0.7.tgz#6150cd3580b29f1e2846a8e9ad2de2e7b0256d53"
+  integrity sha512-5z7hTWGMMxes/xqKom1X5WQeL7X9/XzS547DBrhr3dnziAEeHTFJiyiLQX6jG1itzk7xA293xDls7fO4RX7AUA==
   dependencies:
     config "^3.3.1"
     object-path "^0.11.4"
@@ -5618,10 +5618,24 @@ lint-staged@^10.2.7:
     string-argv "0.3.1"
     stringify-object "^3.3.0"
 
-listr2@^2.1.0, listr2@^2.2.0:
+listr2@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/listr2/-/listr2-2.2.0.tgz#cb88631258abc578c7fb64e590fe5742f28e4aac"
   integrity sha512-Q8qbd7rgmEwDo1nSyHaWQeztfGsdL6rb4uh7BA+Q80AZiDET5rVntiU1+13mu2ZTDVaBVbvAD1Db11rnu3l9sg==
+  dependencies:
+    chalk "^4.0.0"
+    cli-truncate "^2.1.0"
+    figures "^3.2.0"
+    indent-string "^4.0.0"
+    log-update "^4.0.0"
+    p-map "^4.0.0"
+    rxjs "^6.5.5"
+    through "^2.3.8"
+
+listr2@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/listr2/-/listr2-2.2.1.tgz#3a0abf78a7a9d9fb4121a541b524cb52e8dcbbba"
+  integrity sha512-WhuhT7xpVi2otpY/OzJJ8DQhf6da8MjGiEhMdA9oQquwtsSfzZt+YKlasUBer717Uocd0oPmbPeiTD7MvGzctw==
   dependencies:
     chalk "^4.0.0"
     cli-truncate "^2.1.0"

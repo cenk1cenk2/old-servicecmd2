@@ -30,7 +30,7 @@ $ npm install -g @servicecmd/cli
 $ cenk1cenk2 COMMAND
 running command...
 $ cenk1cenk2 (-v|--version|version)
-@servicecmd/cli/0.0.1 linux-x64 node-v13.12.0
+@servicecmd/cli/0.0.1 linux-x64 node-v14.4.0
 $ cenk1cenk2 --help [COMMAND]
 USAGE
   $ cenk1cenk2 COMMAND
