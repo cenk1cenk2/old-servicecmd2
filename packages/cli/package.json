@@ -103,7 +103,7 @@
     "tsc-watch": "^4.2.9",
     "tsconfig-paths": "^3.9.0",
     "tscpaths": "^0.0.9",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.7"
   },
   "jest": {
     "moduleFileExtensions": [
