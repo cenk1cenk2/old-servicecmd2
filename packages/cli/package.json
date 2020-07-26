@@ -77,11 +77,11 @@
     "@oclif/plugin-help": "^3.1.0",
     "@oclif/plugin-warn-if-update-available": "^1.7.0",
     "@tiagonapoli/oclif-plugin-spaced-commands": "^0.0.6",
-    "enquirer": "^2.3.5",
+    "enquirer": "^2.3.6",
     "execa": "^4.0.3",
     "fs-extra": "^9.0.1",
     "globby": "^11.0.1",
-    "listr2": "^2.2.1",
+    "listr2": "^2.3.4",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
