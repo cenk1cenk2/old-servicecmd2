@@ -55,10 +55,8 @@ export default class ConfigCommand extends ConfigBaseCommand {
         )
       )
       this.logger.module('Configuration file is listed.')
-
     } else {
       this.logger.warn('Configuration file is empty.')
-
     }
   }
 
@@ -132,7 +130,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
 
     // check if regular expression
-    if (new RegExp(/[!*?{}]/g).test(prompt.path)) {
+    if (globby.hasMagic(prompt.path)) {
       response.path = prompt.path.split(':')
       response.regex = parseInt(
         await promptUser<string>({
