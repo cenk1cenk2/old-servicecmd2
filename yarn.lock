@@ -5657,10 +5657,24 @@ lint-staged@^10.2.11:
     string-argv "0.3.1"
     stringify-object "^3.3.0"
 
-listr2@^2.1.0, listr2@^2.3.4, listr2@^2.3.6:
+listr2@^2.1.0, listr2@^2.3.4:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/listr2/-/listr2-2.3.6.tgz#4248bbbfeb321357aff3587cf3c6dbae4942b83b"
   integrity sha512-znchYUj4fahw/SxxJ2SOEytA7enDinu0HFeIS+Z+2o8h4sMyl6cUm6J9GBvF7ICwLjQJy7lDcphwYbjEDgJgcQ==
+  dependencies:
+    chalk "^4.1.0"
+    cli-truncate "^2.1.0"
+    figures "^3.2.0"
+    indent-string "^4.0.0"
+    log-update "^4.0.0"
+    p-map "^4.0.0"
+    rxjs "^6.6.0"
+    through "^2.3.8"
+
+listr2@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/listr2/-/listr2-2.4.0.tgz#aadb094f1f16a96bb9c4dc9b9c3e1d24b1709803"
+  integrity sha512-Hj2ECZdAxDkuYFtIKE35PgdMSqMp0muIhJRG5EyV5pOWFEUmKUG+fhfFrvIUNGBQvvi7wQ41eKTxDBisfvDjFQ==
   dependencies:
     chalk "^4.1.0"
     cli-truncate "^2.1.0"
