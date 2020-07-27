@@ -263,10 +263,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.1.1.tgz#74affa4593523fd4a266977506864516633f7635"
-  integrity sha512-NqXvt9mPcSx/fDPmjkdMpEIk/7PMxihGtB8uqzc7kLoo6C8gz0UaPNbD7SNFCrxYtYsRO/yrw8D9YI5ET4YKrw==
+"@cenk1cenk2/boilerplate-oclif@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.1.2.tgz#eddebde4983431a54a91d8ebd6298ce3bcdc7bf9"
+  integrity sha512-2tHGPgnoIuKtYmJntundg0pKWPqEMtAqex+437op0M9MW6GgdDlFyW6/yrAXKUCyWsfcfqZ2WM2EyeYFUTLX3Q==
   dependencies:
     config "^3.3.1"
     object-path "^0.11.4"
