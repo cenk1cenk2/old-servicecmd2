@@ -263,10 +263,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.1.9":
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.1.9.tgz#b6d56d03cb895a2db2043a66b3436e1d978d8baa"
-  integrity sha512-TqWosp5YbGbgi9pWpBx22SqJtgj4peD/XRTc5OXFMSMj2DWvgw4MFYE5YpzjDwq7YmHBrXNu/2sFcWgha+7h+g==
+"@cenk1cenk2/boilerplate-oclif@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.1.10.tgz#1cafe564cb9b6cd07718e92244859d44954b6457"
+  integrity sha512-L51dFUHD9FZaLxzDZ2ZN23og/jKPrb6dkG+Y0HKxKHRbTsNRu0tQ72rK1sfUejHqfORuY0GzeMKlxa0t17SWVg==
   dependencies:
     chalk "^4.1.0"
     config "^3.3.1"
