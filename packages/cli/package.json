@@ -82,7 +82,7 @@
     "fs-extra": "^9.0.1",
     "globby": "^11.0.1",
     "listr2": "^2.4.1",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@cenk1cenk2/eslint-config": "*",
