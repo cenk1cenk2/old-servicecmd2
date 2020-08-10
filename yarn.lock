@@ -263,10 +263,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.1.13":
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.1.13.tgz#bc141a4ea0d28b96a03da48e3b4862fd46c99be3"
-  integrity sha512-ftBB2H0HEWmS8piKguDlfdHOtnnDpiMPBuw1kofTH+9nhJ8DL11TMwQn4T5GqTcqqwQhees0QIZK/0lS+Bshtw==
+"@cenk1cenk2/boilerplate-oclif@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.2.0.tgz#3a3e64b9292f47c418cbfdbb43eb9300b6269229"
+  integrity sha512-t5fZu0sWC8RrduRSOfV80hRp0n4+cfsWCTl6wqirqljutAzR9swZ71Gnr4FU6DiuPic50OAcltZK3LrY8a95WA==
   dependencies:
     chalk "^4.1.0"
     config "^3.3.1"
@@ -274,7 +274,7 @@
     figures "^3.2.0"
     object-path-immutable "^4.1.0"
     table "^5.4.6"
-    tslib "^2.0.0"
+    tslib "^2.0.1"
     types "^0.1.1"
     winston "^3.3.3"
     yaml "^1.10.0"
