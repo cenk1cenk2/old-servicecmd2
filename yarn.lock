@@ -2788,10 +2788,10 @@ commitizen@^4.0.3, commitizen@^4.1.2:
     strip-bom "4.0.0"
     strip-json-comments "3.0.1"
 
-commitizen@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/commitizen/-/commitizen-4.1.4.tgz#36d5d5afc07e292dc1203128a3e3df092f698b6d"
-  integrity sha512-3Rr7m9O6sittgClOYdSxMypLQl0Qj+o0kJKr+aNVm++QA88UKpCvF+GasCk4/qM4iWBfAVZZ/u/MQ31IQhG+oA==
+commitizen@^4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/commitizen/-/commitizen-4.1.5.tgz#0d54fbac6da4c14e14c0b2159b4f2fedb8321dd7"
+  integrity sha512-oGNNeOARhunAPi5VF7FnLJAUPwajgt7DaC9hrDXFVo+qFlHaCtMtjY+iXOvfIrMBV3qmDZZyjgBsrTQMN5u1rg==
   dependencies:
     cachedir "2.2.0"
     cz-conventional-changelog "3.2.0"
@@ -2801,7 +2801,7 @@ commitizen@^4.1.4:
     find-root "1.1.0"
     fs-extra "8.1.0"
     glob "7.1.4"
-    inquirer "6.5.0"
+    inquirer "6.5.2"
     is-utf8 "^0.2.1"
     lodash "^4.17.20"
     minimist "1.2.5"
@@ -4753,7 +4753,7 @@ inquirer@6.5.0:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-inquirer@^6.2.0:
+inquirer@6.5.2, inquirer@^6.2.0:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-6.5.2.tgz#ad50942375d036d327ff528c08bd5fab089928ca"
   integrity sha512-cntlB5ghuB0iuO65Ovoi8ogLHiWGs/5yNrtUcKjFhSSiVeAIVpD7koaSU9RM8mpXw5YDi9RdYXGQMaOURB7ycQ==
