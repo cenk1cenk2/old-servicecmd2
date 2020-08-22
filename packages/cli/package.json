@@ -10,32 +10,35 @@
   },
   "repository": "https://github.com/cenk1cenk2/servicecmd",
   "scripts": {
-    "start": "bin/run.js $command",
-    "start:debug": "yarn start $command --debug",
-    "start:inspect": "yarn start $command --inspect",
+    "start": "bin/run.js",
     "prebuild": "rimraf tsconfig*.tsbuildinfo && rimraf dist/",
     "build": "tsc -p tsconfig.build.json && tscpaths -p tsconfig.paths.json -s ./dist -o ./dist",
-    "dev:build": "yarn prebuild && tsc -p tsconfig.json && tscpaths -p tsconfig.paths.json -s ./dist -o ./dist",
-    "dev:start": "yarn dev:build && TS_NODE_PROJECT='tsconfig.paths.json' tsc-watch --noClear --onSuccess \"yarn dev:start:onSuccess\"",
-    "dev:start:onSuccess": "tscpaths -p tsconfig.paths.json -s ./dist -o ./dist",
-    "lint": "prettier --write src/ && eslint --ext .json,.ts,.js --fix src/",
+    "postbuild": "tscpaths -p tsconfig.paths.json -s ./dist -o ./dist",
+    "dev:build": "yarn prebuild && tsc -p tsconfig.json && yarn postbuild",
+    "dev:start": "yarn dev:build && tsc-watch --noClear --onSuccess \"yarn postbuild\"",
+    "lint": "prettier --write src/ && eslint --ext .ts,.js,.tsx,.jsx --fix src/",
+    "lint:check": "eslint --ext .ts,.js,.tsx,.jsx src/",
+    "lint:staged": "lint-staged",
     "release": "yarn lint && yarn readme",
     "readme": "yarn oclif-dev readme",
-    "oclif": "oclif $command",
+    "oclif": "oclif",
     "oclif-dev": "node -r tsconfig-paths/register ../../node_modules/@oclif/dev-cli/bin/run",
-    "test": "NODE_ENV=test jest --forceExit --runInBand --config ./tests/jest.js",
-    "test:cov": "NODE_ENV=test jest --coverage --config ./tests/jest.js",
-    "dev:test": "NODE_ENV=test jest --verbose --runInBand --forceExit --watchAll --config ./tests/jest.js"
+    "test": "NODE_ENV=test jest --forceExit --runInBand --config ./tests/jest.config.js",
+    "test:cov": "NODE_ENV=test jest --coverage --config ./tests/jest.config.js",
+    "dev:test": "NODE_ENV=test jest --verbose --runInBand --forceExit --watchAll --config ./tests/jest.config.js"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn readme && lint-staged"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "src/*.{ts,js,json}": [
+    "./*.{ts,js,tsx,jsx}": [
       "prettier --write",
-      "eslint --ext .json,.ts,.js --fix"
+      "eslint --fix"
+    ],
+    "./*.{json,md}": [
+      "prettier --write"
     ]
   },
   "files": [

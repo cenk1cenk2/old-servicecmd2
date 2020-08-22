@@ -1,5 +1,6 @@
 cli: 'servicecmd'
 loglevel: module
+logcolor: true
 configDir: '.config/servicecmd'
 localConfig: '.servicecmd.local.yml'
 lock: '.servicecmd.lock'

@@ -1,4 +1,4 @@
-import { ConfigBaseCommand, createTable, IConfigRemove, promptUser } from '@cenk1cenk2/boilerplate-oclif'
+import { ConfigBaseCommand, createTable, ConfigRemove, ConfigTypes, promptUser } from '@cenk1cenk2/boilerplate-oclif'
 import chalk from 'chalk'
 import fs from 'fs-extra'
 import globby from 'globby'
@@ -9,7 +9,7 @@ import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = 'Edit services that is managed by this CLI.'
   protected configName = 'services.servicecmd.yml'
-  protected configType: 'general' = 'general'
+  protected configType = ConfigTypes.general
 
   async configAdd (config: ServiceConfig): Promise<ServiceConfig> {
     // prompt user for details
@@ -60,7 +60,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
   }
 
-  public async configRemove (config: ServiceConfig): Promise<IConfigRemove<ServiceConfig>> {
+  public async configRemove (config: ServiceConfig): Promise<ConfigRemove<ServiceConfig>> {
     return {
       keys: Object.keys(config),
       removeFunction: async (config: ServiceConfig, userInput: string[]): Promise<ServiceConfig> => {
