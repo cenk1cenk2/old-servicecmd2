@@ -1,10 +1,9 @@
 import { ConfigBaseCommand, ConfigRemove, ConfigTypes, createTable, promptUser } from '@cenk1cenk2/boilerplate-oclif'
 import globby from 'globby'
-import { PromptOptions } from 'listr2'
 
-import { parseFileNamesInDirectory } from '../../utils/file.util'
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
 import { RegexConstants } from '@interfaces/regex.constants'
+import { parseFileNamesInDirectory } from '@utils/file.util'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = [
