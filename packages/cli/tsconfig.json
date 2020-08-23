@@ -8,6 +8,7 @@
       "@src/*": ["*"],
       "@commands/*": ["commands/*"],
       "@helpers/*": ["helpers/*"],
+      "@utils/*": ["utils/*"],
       "@interfaces/*": ["interfaces/*"],
       "@context/*": ["interfaces/commands/*"],
       "@templates/*": ["templates/*"]

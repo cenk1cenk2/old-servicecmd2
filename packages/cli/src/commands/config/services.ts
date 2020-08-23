@@ -1,19 +1,25 @@
-import { ConfigBaseCommand, createTable, ConfigRemove, ConfigTypes, promptUser } from '@cenk1cenk2/boilerplate-oclif'
-import chalk from 'chalk'
-import fs from 'fs-extra'
+import { ConfigBaseCommand, ConfigRemove, ConfigTypes, createTable, promptUser } from '@cenk1cenk2/boilerplate-oclif'
 import globby from 'globby'
 import { PromptOptions } from 'listr2'
 
+import { parseFileNamesInDirectory } from '../../utils/file.util'
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
+import { RegexConstants } from '@interfaces/regex.constants'
 
 export default class ConfigCommand extends ConfigBaseCommand {
-  static description = 'Edit services that is managed by this CLI.'
+  static description = [
+    'Edit services that is managed by this CLI.',
+    '- Path can be a absolute value, relative to default directory or a regular expression.',
+    `- Regular expressions can be in gitignore format seperated by '${RegexConstants.REGEX_SPLITTER}'.`,
+    '- Name is a alias to call services from the CLI directly.'
+  ].join('\n')
+
   protected configName = 'services.servicecmd.yml'
   protected configType = ConfigTypes.general
 
   async configAdd (config: ServiceConfig): Promise<ServiceConfig> {
     // prompt user for details
-    const response = await promptUser<ServiceProperties>(this.prompt(config))
+    const response = await this.prompt(config)
 
     if (response) {
       config[response?.name] = Object.keys(response).reduce((o, key) => {
@@ -35,7 +41,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
       choices: Object.keys(config)
     })
 
-    const edit = await promptUser(this.prompt(config, select))
+    const edit = await this.prompt(config, select)
 
     // write to temp
     config[edit.name] = edit
@@ -46,11 +52,11 @@ export default class ConfigCommand extends ConfigBaseCommand {
 
   public async configShow (config: ServiceConfig): Promise<void> {
     if (Object.keys(config).length > 0) {
-      this.logger.info(
+      this.logger.direct(
         createTable(
-          [ 'Name', 'Path' ],
+          [ 'Name', 'Path', 'File' ],
           Object.values(config).reduce((o, entry) => {
-            return [ ...o, [ entry.name, entry.path.toString() ] ]
+            return [ ...o, [ entry.name, entry.path.toString(), entry.file.toString() ] ]
           }, [])
         )
       )
@@ -58,6 +64,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
     } else {
       this.logger.warn('Configuration file is empty.')
     }
+    this.logger.module('Bravo')
   }
 
   public async configRemove (config: ServiceConfig): Promise<ConfigRemove<ServiceConfig>> {
@@ -76,42 +83,46 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
   }
 
-  private prompt (config: ServiceConfig, id?: string): PromptOptions {
-    return {
+  private prompt (config: ServiceConfig, id?: string): Promise<ServiceProperties> {
+    return promptUser({
       type: 'Form',
       message: 'Please provide the details for service.',
       choices: [
         {
           name: 'path',
           message: 'Path',
-          initial: id ? config[id].path.join(':') : '',
+          initial: id ? config[id].path.join(RegexConstants.REGEX_SPLITTER) : '',
           required: true
         },
         {
           name: 'name',
           message: 'Name',
           initial: id ? config[id].name : ''
+        },
+        {
+          name: 'file',
+          message: 'File',
+          initial: id ? config[id].file.join(RegexConstants.REGEX_SPLITTER) : 'docker-compose.yml'
         }
       ],
-      footer: chalk.italic.dim(
-        // eslint-disable-next-line max-len
-        'Path can be a absolute value, relative to default directory or a regular expression. Regular expressions can be in gitignore format seperated by colons. Name is a alias to call services from the CLI directly. Elsewise it will be defaulting to the path.'
-      ),
       validate: (value: any): Promise<string | boolean> => this.validate(config, value),
-      result: (value: any): Promise<ServiceProperties> => this.result(config, value)
-    }
+      result: (value: any): Promise<ServiceProperties> => this.result(config, value, id)
+    })
   }
 
   private async validate (config: ServiceConfig, response: ServicePrompt): Promise<boolean | string> {
-    if (globby.hasMagic(response.path)) {
-      const test = await globby(response.path.split(':'))
-      test.forEach((message) => this.message.info(message))
+    const pattern = await globby(parseFileNamesInDirectory(response.path, response.file))
+
+    if (pattern.length === 0) {
+      return `Can not find any matching files with pattern: ${response.file}@${response.path}`
     }
+
+    pattern.forEach((message) => this.message.verbose(`Found pattern: ${message}`))
 
     return true
   }
 
-  private async result (config: ServiceConfig, prompt: ServicePrompt): Promise<ServiceProperties> {
+  private async result (config: ServiceConfig, prompt: ServicePrompt, id?: string): Promise<ServiceProperties> {
     const response = {} as ServiceProperties
 
     // initiate empty names as their paths
@@ -124,19 +135,19 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
 
     // if item with given name already exists prompt first
-    let overwritePrompt: boolean
-    if (config?.[response?.name]) {
+    let overwritePrompt = true
+    if (config?.[response?.name] && !id) {
       overwritePrompt = await promptUser<boolean>({ type: 'Toggle', message: `Name "${response.name}" already exists in local configuration. Do you want to overwrite?` })
     }
 
     // check if regular expression
     if (globby.hasMagic(prompt.path)) {
-      response.path = prompt.path.split(':')
+      response.path = prompt.path.split(RegexConstants.REGEX_SPLITTER)
       response.regex = parseInt(
         await promptUser<string>({
           type: 'Input',
           message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
-          initial: '1',
+          initial: typeof config[id].regex === 'number' ? config[id].regex.toString() : '1',
           validate: (value): boolean | string => {
             if (parseInt(value, 10) && parseInt(value, 10) > 0) {
               return true
@@ -152,8 +163,10 @@ export default class ConfigCommand extends ConfigBaseCommand {
       response.regex = false
     }
 
+    response.file = prompt.file.split(RegexConstants.REGEX_SPLITTER)
+
     // abort mission on certain occasions, and return the prompt on the valid ones
-    if (overwritePrompt ?? true) {
+    if (overwritePrompt) {
       return response
     } else {
       return
