@@ -1,9 +1,9 @@
-import { ConfigBaseCommand, ConfigRemove, ConfigTypes, createTable, promptUser } from '@cenk1cenk2/boilerplate-oclif'
+import { ConfigBaseCommand, ConfigCommandChoices, ConfigRemove, ConfigTypes, createTable, promptUser } from '@cenk1cenk2/boilerplate-oclif'
 import globby from 'globby'
 
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
-import { RegexConstants } from '@interfaces/regex.constants'
-import { parseFileNamesInDirectory } from '@utils/file.util'
+import { ConfigFileConstants, RegexConstants } from '@interfaces/constants'
+import { findFilesInDirectory } from '@utils/file.util'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = [
@@ -13,7 +13,16 @@ export default class ConfigCommand extends ConfigBaseCommand {
     '- Name is a alias to call services from the CLI directly.'
   ].join('\n')
 
-  protected configName = 'services.servicecmd.yml'
+  public choices = [
+    ConfigCommandChoices.show,
+    ConfigCommandChoices.add,
+    ConfigCommandChoices.edit,
+    ConfigCommandChoices.remove,
+    ConfigCommandChoices.delete,
+    ConfigCommandChoices.import
+  ]
+
+  protected configName = ConfigFileConstants.SERVICES_CONFIG
   protected configType = ConfigTypes.general
 
   async configAdd (config: ServiceConfig): Promise<ServiceConfig> {
@@ -53,17 +62,18 @@ export default class ConfigCommand extends ConfigBaseCommand {
     if (Object.keys(config).length > 0) {
       this.logger.direct(
         createTable(
-          [ 'Name', 'Path', 'File' ],
-          Object.values(config).reduce((o, entry) => {
-            return [ ...o, [ entry.name, entry.path.toString(), entry.file.toString() ] ]
-          }, [])
+          [ 'Name', 'Path', 'File', 'Found Entries' ],
+          await Object.values(config).reduce(async (o, entry) => {
+            const files = await findFilesInDirectory(entry.path, entry.file)
+
+            return [ ...await o, [ entry.name, entry.path.toString(), entry.file.toString(), files.length > 0 ? files.join('\n') : 'No files found.' ] ]
+          }, Promise.resolve([]))
         )
       )
       this.logger.module('Configuration file is listed.')
     } else {
       this.logger.warn('Configuration file is empty.')
     }
-    this.logger.module('Bravo')
   }
 
   public async configRemove (config: ServiceConfig): Promise<ConfigRemove<ServiceConfig>> {
@@ -104,13 +114,13 @@ export default class ConfigCommand extends ConfigBaseCommand {
           initial: id ? config[id].file.join(RegexConstants.REGEX_SPLITTER) : 'docker-compose.yml'
         }
       ],
-      validate: (value: any): Promise<string | boolean> => this.validate(config, value),
+      validate: (value: any): Promise<string | boolean> => this.validate(value),
       result: (value: any): Promise<ServiceProperties> => this.result(config, value, id)
     })
   }
 
-  private async validate (config: ServiceConfig, response: ServicePrompt): Promise<boolean | string> {
-    const pattern = await globby(parseFileNamesInDirectory(response.path, response.file))
+  private async validate (response: ServicePrompt): Promise<boolean | string> {
+    const pattern = await findFilesInDirectory(response.path, response.file)
 
     if (pattern.length === 0) {
       return `Can not find any matching files with pattern: ${response.file}@${response.path}`
@@ -146,7 +156,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
         await promptUser<string>({
           type: 'Input',
           message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
-          initial: typeof config[id].regex === 'number' ? config[id].regex.toString() : '1',
+          initial: typeof config[id]?.regex === 'number' ? config[id]?.regex.toString() : '1',
           validate: (value): boolean | string => {
             if (parseInt(value, 10) && parseInt(value, 10) > 0) {
               return true
