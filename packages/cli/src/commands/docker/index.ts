@@ -113,8 +113,12 @@ export default class DockerCommand extends BaseCommand {
           }
 
           task.title = `Found ${ctx.services.length} matching services.`
+          task.output = ctx.services.join('\n')
 
           this.message.verbose('Applying on services:\n%o', ctx.services)
+        },
+        options: {
+          persistentOutput: true
         }
       }
 
