@@ -3,7 +3,7 @@ import globby from 'globby'
 
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
 import { ConfigFileConstants, RegexConstants } from '@interfaces/constants'
-import { findFilesInDirectory } from '@utils/file.util'
+import { findFilesInDirectory, findFilesInDirectoryWithServiceConfig, groupFilesInFolders } from '@utils/file.util'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = [
@@ -64,7 +64,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
         createTable(
           [ 'Name', 'Path', 'File', 'Found Entries' ],
           await Object.values(config).reduce(async (o, entry) => {
-            const files = await findFilesInDirectory(entry.path, entry.file)
+            const files = await findFilesInDirectoryWithServiceConfig(entry)
 
             return [ ...await o, [ entry.name, entry.path.toString(), entry.file.toString(), files.length > 0 ? files.join('\n') : 'No files found.' ] ]
           }, Promise.resolve([]))
@@ -119,14 +119,22 @@ export default class ConfigCommand extends ConfigBaseCommand {
     })
   }
 
-  private async validate (response: ServicePrompt): Promise<boolean | string> {
-    const pattern = await findFilesInDirectory(response.path, response.file)
+  private async validate (response: ServicePrompt, options?: globby.GlobbyOptions, validateOptions?: { log: boolean }): Promise<boolean | string> {
+    // assign default options
+    validateOptions = {
+      log: true,
+      ...validateOptions
+    }
+
+    const pattern = await findFilesInDirectory(response.path, response.file, options)
 
     if (pattern.length === 0) {
       return `Can not find any matching files with pattern: ${response.file}@${response.path}`
     }
 
-    pattern.forEach((message) => this.message.verbose(`Found pattern: ${message}`))
+    if (validateOptions?.log) {
+      pattern.forEach((message) => this.message.verbose(`Found pattern: ${message}`))
+    }
 
     return true
   }
@@ -157,12 +165,15 @@ export default class ConfigCommand extends ConfigBaseCommand {
           type: 'Input',
           message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
           initial: typeof config[id]?.regex === 'number' ? config[id]?.regex.toString() : '1',
-          validate: (value): boolean | string => {
-            if (parseInt(value, 10) && parseInt(value, 10) > 0) {
-              return true
-            } else {
-              return 'Search depth must be a positive number.'
+          validate: (value): Promise<boolean | string> | string => {
+            value = parseInt(value, 10)
+
+            if (!isNaN(value) && value >= 0) {
+              value = value > 0 ? value : Infinity
+              return this.validate(prompt, { deep: value }, { log: false })
             }
+
+            return 'Search depth must be a positive number or 0 for disabling.'
           }
         }),
         10
@@ -177,8 +188,6 @@ export default class ConfigCommand extends ConfigBaseCommand {
     // abort mission on certain occasions, and return the prompt on the valid ones
     if (overwritePrompt) {
       return response
-    } else {
-      return
     }
   }
 }

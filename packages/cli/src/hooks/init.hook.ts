@@ -6,7 +6,6 @@ import { logo } from '@templates/logo.template'
 export default generateInitHook({
   logo,
   preliminaryTask: async (opts) => {
-    notifier({ pkg: { name: opts.config.name, version: opts.config.version } })
-      .notify({ isGlobal: true })
+    notifier({ pkg: { name: opts.config.name, version: opts.config.version } }).notify({ isGlobal: true })
   }
 })

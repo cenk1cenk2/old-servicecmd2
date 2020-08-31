@@ -4,7 +4,7 @@
   "repository": "https://github.com/cenk1cenk2/servicecmd",
   "scripts": {
     "ls": "lerna la",
-    "rimraf": "rimraf node_modules && lerna clean -y",
+    "clean": "lerna clean -y && rimraf node_modules yarn.lock",
     "exec": "lerna exec --stream --parallel",
     "command": "lerna run --stream --parallel"
   },
