@@ -4,7 +4,8 @@ export enum DockerCommandConstants {
 }
 
 export enum DockerCommandFlagsWithLimitation {
-  TARGET = 'target'
+  TARGET = 'target',
+  FORCE_REMOVE = 'force-rm'
 }
 
 export const DockerCommandsAvailable: Record<string, DockerCommandsAvailableInterface> = {

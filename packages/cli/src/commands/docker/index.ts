@@ -19,41 +19,38 @@ export default class DockerCommand extends BaseCommand {
   static strict = false
 
   static flags = {
-    force: Flags.boolean({ char: 'f' }),
-    regex: Flags.string({
-      char: 'r',
+    limit: Flags.string({
+      char: 'l',
       multiple: true,
-      description: 'Add services with JavaScript regular expression pattern filtering by entry name.'
+      description: 'Limit a service utilizing JavaScript regex pattern depending on the final folder location.'
     }),
     ignore: Flags.string({
       char: 'i',
       multiple: true,
-      description: 'Ignore services with JavaScript regular expression pattern filtering directly.'
+      description: 'Ignore a service utilizing JavaScript regex pattern depending on the final folder location.'
     }),
-    service: Flags.string({
-      char: 's',
-      multiple: true,
-      description: 'Directly target a service with regular expression.'
-    }),
-    target: Flags.string({
-      char: 't',
-      description: 'Target a container directly in docker-compose file.'
+    // flags with limitation
+    [DockerCommandFlagsWithLimitation.TARGET]: Flags.string({
+      char: DockerCommandFlagsWithLimitation.TARGET.charAt(0) as any,
+      description: [
+        'Target a container directly in docker-compose file.',
+        // eslint-disable-next-line max-len
+        `Works with commands: "${Object.entries(DockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(DockerCommandFlagsWithLimitation.TARGET) ? [ ...o, k ] : o, [])}"`
+      ].join('\n')
     })
   }
 
   static args: Args.IArg[] = [
     {
       name: 'command',
-      description: 'Execute the command.',
+      description: 'Execute the given command.',
       options: Object.keys(DockerCommandsAvailable),
       required: true
     },
     {
       name: 'service',
-      description: [
-        'Filter services by name to apply the command on.',
-        `Defaults to "${DockerCommandConstants.ALL_SERVICES}" services.`
-      ].join('\n')
+      description: 'Limit the task with service group name.',
+      default: DockerCommandConstants.ALL_SERVICES
     }
   ]
 
@@ -64,12 +61,7 @@ export default class DockerCommand extends BaseCommand {
     const { args, flags, argv } = this.parse(DockerCommand)
     // get services as rest of the arguments
     argv.splice(argv.indexOf(args.command), 1)
-    args.service = argv.length === 0 ? null : argv
-
-    // set defaults
-    if (!args.service && !flags.regex && !flags.service) {
-      args.service = DockerCommandConstants.ALL_SERVICES
-    }
+    args.service = argv
 
     // parse command
     this.tasks.ctx = { command: DockerCommandsAvailable[args.command] }
@@ -95,25 +87,7 @@ export default class DockerCommand extends BaseCommand {
         }
       },
 
-      // execute preliminary actions
-      {
-        title: 'Parsing all the services...',
-        enabled: !!flags.service,
-        task: async (ctx, task): Promise<void> => {
-          ctx.allServices = []
-          await Promise.all(
-            Object.values(ctx.config).map(async (service) => {
-              ctx.allServices.push(...await findFilesInDirectory(service.path, service.file, { deep: typeof service.regex === 'number' ? service.regex : 1 }))
-            })
-          )
-
-          ctx.allServices = ctx.allServices.filter(uniqueArrayFilter)
-
-          task.title = `Discovered ${ctx.allServices.length} services in total.`
-        }
-      },
-
-      // Scan for services
+      // scan for services
       {
         title: 'Scanning for services...',
         task: async (ctx, task): Promise<void> => {
@@ -121,87 +95,62 @@ export default class DockerCommand extends BaseCommand {
           // filter the services
           task.output = 'Filtering services...'
           ctx.services = []
-          ctx.discoveredServices = []
 
-          // when the services or regex is defined
-          if (args.service !== DockerCommandConstants.ALL_SERVICES) {
-            // preliminary filtering
-            await Promise.all([
-              // direct services as arguments
-              ...args.service?.length > 0 ? args.service.map(async (service) => {
-                const s = Object.keys(ctx.config).filter((s) => service === s)
-                if (s.length > 0) {
-                  task.output = `Found matching service by name: ${s.toString()}`
-                }
-                ctx.services.push(...s)
-              }) : [ Promise.resolve() ],
+          // find matching services
+          let services = args.service.includes(DockerCommandConstants.ALL_SERVICES) ? Object.keys(ctx.config) : args.service
 
-              // regex services
-              ...flags.regex?.length > 0 ? flags.regex.map(async (service) => {
-                const s = Object.keys(ctx.config).filter((s) => new RegExp(service).test(s))
-                if (s.length > 0) {
-                  task.output = `Found matching service by regex pattern: ${s.toString()}`
-                }
-                ctx.services.push(...s)
-              }) : [ Promise.resolve() ],
-
-              // direct service targetting
-              flags.service?.length > 0 ? (async (): Promise<void> => {
-                await Promise.all(
-                  flags.service.map(async (service) => {
-                    const s = ctx.allServices.filter((s) => new RegExp(service).test(s))
-                    if (s.length > 0) {
-                      task.output = `Found matching service by direct pattern: ${s.toString()}`
-                    }
-                    ctx.discoveredServices.push(...s)
-                  })
-                )
-              })() : [ Promise.resolve() ]
-            ])
-
-            // create unique array of services
-            ctx.services = ctx.services.filter(uniqueArrayFilter)
-
-            // the user wants to run over default of all services
-          } else {
-            ctx.services = Object.keys(ctx.config)
-          }
+          // create unique array of services
+          services = services.filter(uniqueArrayFilter)
 
           task.output = 'Grouping services together...'
-          await Promise.all(
-            ctx.services.map(async (service) => {
-              const current = ctx.config[service]
-              const services = await findFilesInDirectory(current.path, current.file, { deep: typeof current.regex === 'number' ? current.regex : 1 })
-              if (services.length > 0) {
-                task.output = `Discovered service: ${services.toString()}`
-                ctx.discoveredServices.push(...services)
-              }
-            })
-          )
+          await Promise.all(services.map(async (service) => {
+            const current = ctx.config[service]
+            if (!current) {
+              this.message.warn(`Can not find service for group name "${service}".`)
+              return
+            }
+
+            const s = await findFilesInDirectory(current.path, current.file, { deep: typeof current.regex === 'number' ? current.regex : 1 })
+            if (s.length > 0) {
+              task.output = `Discovered service: ${s.toString()}`
+              ctx.services.push(...s)
+            }
+          }))
 
           // filter services to be unique
-          ctx.discoveredServices = ctx.discoveredServices.filter(uniqueArrayFilter)
+          ctx.services = ctx.services.filter(uniqueArrayFilter)
 
-          // secondary filtering
-          await Promise.all([
-            // ignore unwanted services
-            flags.ignore?.length > 0 ? flags.ignore.map((service) => {
-              const s = ctx.discoveredServices.filter((s) => !new RegExp(service).test(s))
+          // filter depending on limit
+          if (flags?.limit) {
+            await Promise.all(flags.limit.map(async (service) => {
+              const s = ctx.services.filter((s) => new RegExp(service).test(s))
+              if (s.length > 0) {
+                task.output = `Found matching service by limitting pattern: ${s.toString()}`
+                ctx.services = s
+              }
+            }))
+          }
+
+          // filter depending on ignore
+          if (flags?.ignore) {
+            await Promise.all(flags.ignore.map((service) => {
+              const s = ctx.services.filter((s) => !new RegExp(service).test(s))
               task.output = `Ignoring matching service by regex pattern: ${service}`
-              ctx.discoveredServices = s
-            }) : [ Promise.resolve() ]
-          ])
+              ctx.services = s
+            }))
+          }
 
-          if (ctx.discoveredServices.length === 0) {
+          // check the filtered results
+          if (ctx.services.length === 0) {
             throw new Error('No matching service name has been found.')
           }
 
-          task.title = `Found ${ctx.discoveredServices.length} matching services in configuration.`
+          task.title = `Found ${ctx.services.length} matching services in configuration.`
 
-          ctx.parsedServices = groupFilesInFolders(ctx.discoveredServices)
+          // parse services by grouping them in folders
+          ctx.parsedServices = groupFilesInFolders(ctx.services)
 
-          this.message.debug('Applying on services:\n%o', ctx.parsedServices)
-
+          this.logger.debug('Applying on services:\n%o', ctx.parsedServices)
         },
         options: {
           persistentOutput: false
@@ -214,25 +163,28 @@ export default class DockerCommand extends BaseCommand {
           Object.entries(ctx.parsedServices).map(([ folder, file ]) => ({
             title: folder,
             task: async (ctx, task): Promise<Listr> => {
+              // idiomatic check for empty folders, it should not happen
               if (file.length === 0) {
-                throw new Error(`Can not find any services: ${folder}`)
+                throw new Error(`Can not find any services in folder: ${folder}`)
               }
 
+              // create new subtask for every file in folder
               return task.newListr(file.map((f) => (
                 {
                   title: f,
                   task: async (ctx, task): Promise<void> => {
-                    // the command itself
+                    // parse arguments
                     const args: string[] = []
                     if (flags.target) {
                       args.push(flags.target)
                     }
 
+                    // create instance for command
                     const instance = execa(ctx.command.command, [ ...args ], {
                       cwd: folder, shell: true
                     })
 
-                    // create a log out function for execa
+                    // create a log out function depending on the command options
                     const label = getFolderName(dirname(f))
                     const logOut = (loglevel: LogLevels): WriteStream => {
                       return through((chunk: Buffer | string) => {
@@ -258,15 +210,12 @@ export default class DockerCommand extends BaseCommand {
                       }
                     }
 
-                    // defer the task logging or log it directly
+                    // defer the task or execute it directly
                     if (!ctx.command.deffered) {
                       await createOutputStream()
                     } else {
-                      this.deferred.push(
-                        createOutputStream
-                      )
+                      this.deferred.push(createOutputStream)
                     }
-
                   },
                   options: {
                     persistentOutput: ctx.command?.keepOutput
@@ -288,12 +237,18 @@ export default class DockerCommand extends BaseCommand {
       )
     ])
 
+    // specify this implicitly since we have to add defered tasks in between tasks and messages
+    // run tasks
     await this.tasks.runAll()
+
+    // run deferred tasks
     if (this.deferred.length > 0) {
       this.deferred.forEach(async (defer) => {
         await defer()
       })
     }
+
+    // pop the messages in queue
     this.message.pop()
   }
 }
