@@ -126,13 +126,13 @@ export default class DockerCommand extends BaseCommand {
 
           // filter depending on limit
           if (flags?.limit) {
-            await Promise.all(flags.limit.map(async (service) => {
+            ctx.services = (await Promise.all(flags.limit.map(async (service) => {
               const s = ctx.services.filter((s) => new RegExp(service).test(s))
               if (s.length > 0) {
                 task.output = `Found matching service by limitting pattern: ${s.toString()}`
-                ctx.services = s
+                return s
               }
-            }))
+            }))).flat()
           }
 
           // filter depending on ignore
