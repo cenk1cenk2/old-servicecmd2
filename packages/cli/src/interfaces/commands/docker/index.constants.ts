@@ -3,9 +3,23 @@ export enum DockerCommandConstants {
   ALL_SERVICES = 'all'
 }
 
-export enum DockerCommandFlagsWithLimitation {
+export enum DockerCommandFlagsWithLimitationTypes {
   TARGET = 'target',
-  FORCE_REMOVE = 'force-rm'
+  // FORCE_REMOVE = 'remove-orphans'
+}
+
+export const DockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationInterface[] = [
+  {
+    name: DockerCommandFlagsWithLimitationTypes.TARGET,
+    type: 'string',
+    description: [ 'Target a container directly in docker-compose file.' ]
+  }
+]
+
+export interface DockerCommandFlagsWithLimitationInterface {
+  name: DockerCommandFlagsWithLimitationTypes
+  type: 'string'
+  description: string[]
 }
 
 export const DockerCommandsAvailable: Record<string, DockerCommandsAvailableInterface> = {
@@ -18,7 +32,7 @@ export const DockerCommandsAvailable: Record<string, DockerCommandsAvailableInte
   logs: {
     command: 'docker-compose logs -f',
     deffered: true,
-    limitedFlags: [ DockerCommandFlagsWithLimitation.TARGET ]
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET ]
   },
   pull: {
     command: 'docker-compose pull'
@@ -35,6 +49,6 @@ export const DockerCommandsAvailable: Record<string, DockerCommandsAvailableInte
 export interface DockerCommandsAvailableInterface {
   command: string
   deffered?: boolean
-  limitedFlags?: DockerCommandFlagsWithLimitation[]
+  limitedFlags?: DockerCommandFlagsWithLimitationTypes[]
   keepOutput?: boolean
 }

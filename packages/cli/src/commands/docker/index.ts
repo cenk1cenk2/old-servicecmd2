@@ -1,5 +1,6 @@
 import { BaseCommand, LogLevels } from '@cenk1cenk2/boilerplate-oclif'
 import { flags as Flags } from '@oclif/command'
+import { IFlag, Input, IOptionFlag } from '@oclif/command/lib/flags'
 import { args as Args } from '@oclif/parser'
 import execa from 'execa'
 import { WriteStream } from 'fs'
@@ -8,7 +9,8 @@ import { dirname } from 'path'
 import through from 'through'
 
 import { ServiceConfig } from '@context/config/services.interface'
-import { DockerCommandConstants, DockerCommandFlagsWithLimitation, DockerCommandsAvailable } from '@interfaces/commands/docker/index.constants'
+import { DockerCommandFlagsWithLimitation } from '@context/docker/index.constants'
+import { DockerCommandConstants, DockerCommandFlagsWithLimitationTypes, DockerCommandsAvailable } from '@interfaces/commands/docker/index.constants'
 import { DockerCommandCtx } from '@src/interfaces/commands/docker/index.interface'
 import { ConfigFileConstants } from '@src/interfaces/constants'
 import { findFilesInDirectory, getFolderName, groupFilesInFolders } from '@src/utils/file.util'
@@ -18,7 +20,7 @@ export default class DockerCommand extends BaseCommand {
   static description = 'Runs the designated command over the the intended services.'
   static strict = false
 
-  static flags = {
+  static flags: Record<'limit' | 'ignore', IOptionFlag<string[]>> & Partial<Record<DockerCommandFlagsWithLimitationTypes, IOptionFlag<any>>> = {
     limit: Flags.string({
       char: 'l',
       multiple: true,
@@ -30,14 +32,17 @@ export default class DockerCommand extends BaseCommand {
       description: 'Ignore a service utilizing JavaScript regex pattern depending on the final folder location.'
     }),
     // flags with limitation
-    [DockerCommandFlagsWithLimitation.TARGET]: Flags.string({
-      char: DockerCommandFlagsWithLimitation.TARGET.charAt(0) as any,
-      description: [
-        'Target a container directly in docker-compose file.',
-        // eslint-disable-next-line max-len
-        `Works with commands: "${Object.entries(DockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(DockerCommandFlagsWithLimitation.TARGET) ? [ ...o, k ] : o, [])}"`
-      ].join('\n')
-    })
+    ...DockerCommandFlagsWithLimitation.reduce((o, s) => ({
+      ...o,
+      [s.name]: Flags[s.type]({
+        char: s.name.charAt(0) as any,
+        description: [
+          ...s.description,
+          // eslint-disable-next-line max-len
+          `Works with commands: "${Object.entries(DockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(s.name) ? [ ...o, k ] : o, [])}"`
+        ].join('\n')
+      })
+    }), {})
   }
 
   static args: Args.IArg[] = [
@@ -67,7 +72,7 @@ export default class DockerCommand extends BaseCommand {
     this.tasks.ctx = { command: DockerCommandsAvailable[args.command] }
 
     // check arguments
-    await Promise.all(Object.values(DockerCommandFlagsWithLimitation).map(async (f) => {
+    await Promise.all(Object.values(DockerCommandFlagsWithLimitationTypes).map(async (f) => {
       if (flags[f] && !DockerCommandsAvailable[args.command].limitedFlags?.includes(f)) {
         throw new Error(`Specifiying a "${f}" flag is not available for command "${args.command}".`)
       }
@@ -77,7 +82,6 @@ export default class DockerCommand extends BaseCommand {
       // read configuration file
       {
         task: async (ctx): Promise<void> => {
-          // read configuration file
           try {
             ctx.config = (await this.getConfig<ServiceConfig>(ConfigFileConstants.SERVICES_CONFIG)).config
           } catch (e) {
