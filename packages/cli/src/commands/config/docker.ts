@@ -3,7 +3,7 @@ import globby from 'globby'
 
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
 import { ConfigFileConstants, RegexConstants } from '@interfaces/constants'
-import { findFilesInDirectory, findFilesInDirectoryWithServiceConfig, groupFilesInFolders } from '@utils/file.util'
+import { findFilesInDirectory, findFilesInDirectoryWithServiceConfig } from '@utils/file.util'
 
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = [

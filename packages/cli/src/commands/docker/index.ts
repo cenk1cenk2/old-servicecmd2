@@ -1,7 +1,7 @@
 import { BaseCommand, LogLevels } from '@cenk1cenk2/boilerplate-oclif'
 import { flags as Flags } from '@oclif/command'
-import { IFlag, Input, IOptionFlag } from '@oclif/command/lib/flags'
 import { args as Args } from '@oclif/parser'
+import { IBooleanFlag, IOptionFlag } from '@oclif/parser/lib/flags'
 import execa from 'execa'
 import { WriteStream } from 'fs'
 import { Listr } from 'listr2'
@@ -9,8 +9,8 @@ import { dirname } from 'path'
 import through from 'through'
 
 import { ServiceConfig } from '@context/config/services.interface'
-import { DockerCommandFlagsWithLimitation } from '@context/docker/index.constants'
-import { DockerCommandConstants, DockerCommandFlagsWithLimitationTypes, DockerCommandsAvailable } from '@interfaces/commands/docker/index.constants'
+import { dockerCommandFlagsWithLimitation } from '@context/docker/index.constants'
+import { DockerCommandConstants, DockerCommandFlagsWithLimitationTypes, dockerCommandsAvailable } from '@interfaces/commands/docker/index.constants'
 import { DockerCommandCtx } from '@src/interfaces/commands/docker/index.interface'
 import { ConfigFileConstants } from '@src/interfaces/constants'
 import { findFilesInDirectory, getFolderName, groupFilesInFolders } from '@src/utils/file.util'
@@ -20,7 +20,9 @@ export default class DockerCommand extends BaseCommand {
   static description = 'Runs the designated command over the the intended services.'
   static strict = false
 
-  static flags: Record<'limit' | 'ignore', IOptionFlag<string[]>> & Partial<Record<DockerCommandFlagsWithLimitationTypes, IOptionFlag<any>>> = {
+  static flags: Record<'limit' | 'ignore', IOptionFlag<string[]>> &
+  Record<'prompt', IBooleanFlag<boolean>> &
+  Partial<Record<DockerCommandFlagsWithLimitationTypes, IOptionFlag<any> | IBooleanFlag<boolean>>> = {
     limit: Flags.string({
       char: 'l',
       multiple: true,
@@ -31,25 +33,32 @@ export default class DockerCommand extends BaseCommand {
       multiple: true,
       description: 'Ignore a service utilizing JavaScript regex pattern depending on the final folder location.'
     }),
+    prompt: Flags.boolean({
+      char: 'p',
+      description: 'Prompt user before doing something.'
+    }),
     // flags with limitation
-    ...DockerCommandFlagsWithLimitation.reduce((o, s) => ({
-      ...o,
-      [s.name]: Flags[s.type]({
-        char: s.name.charAt(0) as any,
-        description: [
-          ...s.description,
-          // eslint-disable-next-line max-len
-          `Works with commands: "${Object.entries(DockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(s.name) ? [ ...o, k ] : o, [])}"`
-        ].join('\n')
-      })
-    }), {})
+    ...dockerCommandFlagsWithLimitation.reduce(
+      (o, s) => ({
+        ...o,
+        [s.name]: Flags[s.type]({
+          char: s.useChar ? s.name.charAt(0) as any: null,
+          description: [
+            ...s.description,
+            `Works with commands: "${Object.entries(dockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(s.name) ? [ ...o, k ] : o, [])}"`
+          ].join('\n'),
+          ...(s.options as any)
+        })
+      }),
+      {}
+    )
   }
 
   static args: Args.IArg[] = [
     {
       name: 'command',
       description: 'Execute the given command.',
-      options: Object.keys(DockerCommandsAvailable),
+      options: Object.keys(dockerCommandsAvailable),
       required: true
     },
     {
@@ -69,14 +78,16 @@ export default class DockerCommand extends BaseCommand {
     args.service = argv
 
     // parse command
-    this.tasks.ctx = { command: DockerCommandsAvailable[args.command] }
+    this.tasks.ctx = { command: dockerCommandsAvailable[args.command] }
 
     // check arguments
-    await Promise.all(Object.values(DockerCommandFlagsWithLimitationTypes).map(async (f) => {
-      if (flags[f] && !DockerCommandsAvailable[args.command].limitedFlags?.includes(f)) {
-        throw new Error(`Specifiying a "${f}" flag is not available for command "${args.command}".`)
-      }
-    }))
+    await Promise.all(
+      Object.values(DockerCommandFlagsWithLimitationTypes).map(async (f) => {
+        if (flags[f] && !dockerCommandsAvailable[args.command].limitedFlags?.includes(f)) {
+          throw new Error(`Specifiying a "${f}" flag is not available for command "${args.command}".`)
+        }
+      })
+    )
 
     this.tasks.add<DockerCommandCtx>([
       // read configuration file
@@ -87,7 +98,6 @@ export default class DockerCommand extends BaseCommand {
           } catch (e) {
             throw new Error('Configuration file not found. Please use the config menu to create one.')
           }
-
         }
       },
 
@@ -95,7 +105,6 @@ export default class DockerCommand extends BaseCommand {
       {
         title: 'Scanning for services...',
         task: async (ctx, task): Promise<void> => {
-
           // filter the services
           task.output = 'Filtering services...'
           ctx.services = []
@@ -107,41 +116,49 @@ export default class DockerCommand extends BaseCommand {
           services = services.filter(uniqueArrayFilter)
 
           task.output = 'Grouping services together...'
-          await Promise.all(services.map(async (service) => {
-            const current = ctx.config[service]
-            if (!current) {
-              this.message.warn(`Can not find service for group name "${service}".`)
-              return
-            }
+          await Promise.all(
+            services.map(async (service) => {
+              const current = ctx.config[service]
+              if (!current) {
+                this.message.warn(`Can not find service for group name "${service}".`)
+                return
+              }
 
-            const s = await findFilesInDirectory(current.path, current.file, { deep: typeof current.regex === 'number' ? current.regex : 1 })
-            if (s.length > 0) {
-              task.output = `Discovered service: ${s.toString()}`
-              ctx.services.push(...s)
-            }
-          }))
+              const s = await findFilesInDirectory(current.path, current.file, { deep: typeof current.regex === 'number' ? current.regex : 1 })
+              if (s.length > 0) {
+                task.output = `Discovered service: ${s.toString()}`
+                ctx.services.push(...s)
+              }
+            })
+          )
 
           // filter services to be unique
           ctx.services = ctx.services.filter(uniqueArrayFilter)
 
           // filter depending on limit
           if (flags?.limit) {
-            ctx.services = (await Promise.all(flags.limit.map(async (service) => {
-              const s = ctx.services.filter((s) => new RegExp(service).test(s))
-              if (s.length > 0) {
-                task.output = `Found matching service by limitting pattern: ${s.toString()}`
-                return s
-              }
-            }))).flat()
+            ctx.services = (
+              await Promise.all(
+                flags.limit.map(async (service) => {
+                  const s = ctx.services.filter((s) => new RegExp(service).test(s))
+                  if (s.length > 0) {
+                    task.output = `Found matching service by limitting pattern: ${s.toString()}`
+                    return s
+                  }
+                })
+              )
+            ).flat()
           }
 
           // filter depending on ignore
           if (flags?.ignore) {
-            await Promise.all(flags.ignore.map((service) => {
-              const s = ctx.services.filter((s) => !new RegExp(service).test(s))
-              task.output = `Ignoring matching service by regex pattern: ${service}`
-              ctx.services = s
-            }))
+            await Promise.all(
+              flags.ignore.map((service) => {
+                const s = ctx.services.filter((s) => !new RegExp(service).test(s))
+                task.output = `Ignoring matching service by regex pattern: ${service}`
+                ctx.services = s
+              })
+            )
           }
 
           // check the filtered results
@@ -154,12 +171,16 @@ export default class DockerCommand extends BaseCommand {
           // parse services by grouping them in folders
           ctx.parsedServices = groupFilesInFolders(ctx.services)
 
+          // check limits here
+
           this.logger.debug('Applying on services:\n%o', ctx.parsedServices)
         },
         options: {
           persistentOutput: false
         }
       },
+
+      // prompt user before doing something if flag is specified
 
       // apply the command on services
       this.tasks.indent(
@@ -173,8 +194,8 @@ export default class DockerCommand extends BaseCommand {
               }
 
               // create new subtask for every file in folder
-              return task.newListr(file.map((f) => (
-                {
+              return task.newListr(
+                file.map((f) => ({
                   title: f,
                   task: async (ctx, task): Promise<void> => {
                     // parse arguments
@@ -185,7 +206,9 @@ export default class DockerCommand extends BaseCommand {
 
                     // create instance for command
                     const instance = execa(ctx.command.command, [ ...args ], {
-                      cwd: folder, shell: true
+                      cwd: folder,
+                      shell: true,
+                      stdio: ctx.command.headless ? 'inherit' : 'pipe'
                     })
 
                     // create a log out function depending on the command options
@@ -202,11 +225,8 @@ export default class DockerCommand extends BaseCommand {
                       })
                     }
 
-                    // create output stream depending on the context
-                    const createOutputStream = async (): Promise<void> => {
-                      instance.stdout.pipe(logOut(LogLevels.info))
-                      instance.stderr.pipe(logOut(LogLevels.warn))
-
+                    // crete the task
+                    const execute = async (): Promise<void> => {
                       try {
                         await instance
                       } catch (e) {
@@ -214,28 +234,42 @@ export default class DockerCommand extends BaseCommand {
                       }
                     }
 
+                    // create output stream depending on the context
+                    const createOutputStream = async (): Promise<void> => {
+                      instance.stdout.pipe(logOut(LogLevels.info))
+                      instance.stderr.pipe(logOut(LogLevels.warn))
+
+                      await execute()
+                    }
+
                     // defer the task or execute it directly
-                    if (!ctx.command.deffered) {
-                      await createOutputStream()
-                    } else {
+                    if (ctx.command.headless) {
+                      this.deferred.push(execute)
+                    } else if (ctx.command.deffered) {
                       this.deferred.push(createOutputStream)
+                    } else {
+                      await createOutputStream()
                     }
                   },
                   options: {
                     persistentOutput: ctx.command?.keepOutput
                   }
+                })),
+                {
+                  concurrent: true,
+                  exitOnError: false,
+                  rendererOptions: { collapse: !ctx.command?.keepOutput }
                 }
-              )),
-              {
-                concurrent: true, exitOnError: false, rendererOptions: { collapse: !ctx.command?.keepOutput }
-              })
+              )
             },
             options: {
               showTimer: true
             }
           })),
         {
-          concurrent: true, exitOnError: false, rendererOptions: { collapse: false }
+          concurrent: true,
+          exitOnError: false,
+          rendererOptions: { collapse: false }
         },
         { title: `Executing "${args.command}" command for services.`, options: { showTimer: true } }
       )
