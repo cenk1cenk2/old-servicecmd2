@@ -13,7 +13,7 @@ export interface DockerCommandCtx {
 export type DockerCommandFlagsWithLimitationInterface = {
   name: DockerCommandFlagsWithLimitationTypes
   type: 'string' | 'boolean'
-  argument: 'direct-start' | 'with-double' | 'with-single' | 'direct-end'
+  argument: 'value-start' | 'with-double' | 'with-single' | 'with-double-and-value' | 'with-single-and value' | 'value-end'
   useChar?: boolean
   limits?: {
     services: number

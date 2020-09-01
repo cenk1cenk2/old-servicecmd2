@@ -14,7 +14,7 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
   {
     name: DockerCommandFlagsWithLimitationTypes.TARGET,
     type: 'string',
-    argument: 'direct-start',
+    argument: 'value-start',
     useChar: true,
     description: [ 'Target a container directly in docker-compose file.' ]
   },
@@ -51,7 +51,7 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
   {
     name: DockerCommandFlagsWithLimitationTypes.COMMAND,
     type: 'string',
-    argument: 'direct-end',
+    argument: 'value-end',
     useChar: true,
     description: [ 'Run a command.' ]
   }
