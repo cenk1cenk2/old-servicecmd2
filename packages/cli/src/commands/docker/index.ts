@@ -196,7 +196,7 @@ export default class DockerCommand extends BaseCommand {
               // create new subtask for every file in folder
               return task.newListr(
                 file.map((f) => ({
-                  title: f,
+                  title: f.replace(new RegExp(`${folder}/?`), ''),
                   task: async (ctx, task): Promise<void> => {
                     // parse arguments
                     const args: string[] = []
