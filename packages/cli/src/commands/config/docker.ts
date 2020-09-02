@@ -8,9 +8,9 @@ import { findFilesInDirectory, findFilesInDirectoryWithServiceConfig } from '@ut
 export default class ConfigCommand extends ConfigBaseCommand {
   static description = [
     'Edit services that is managed by this CLI.',
-    '- Path can be a absolute value, relative to default directory or a regular expression.',
-    `- Regular expressions can be in gitignore format seperated by '${RegexConstants.REGEX_SPLITTER}'.`,
-    '- Name is a alias to call services from the CLI directly.'
+    `- Path can be a absolute value or a regular expression in gitignore format seperated by "${RegexConstants.REGEX_SPLITTER}".`,
+    '- Name is a alias to group the specific set of services.',
+    '- Regular expressions can have a depth to limit their recursive iteration over folders. "0" will disable this limit.'
   ].join('\n')
 
   public choices = [
@@ -80,10 +80,10 @@ export default class ConfigCommand extends ConfigBaseCommand {
     return {
       keys: Object.keys(config),
       removeFunction: async (config: ServiceConfig, userInput: string[]): Promise<ServiceConfig> => {
-        let desiredConfig: ServiceConfig
+        let desiredConfig = config
         userInput.forEach((entry) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-          const { [entry]: omit, ...rest } = config
+          const { [entry]: omit, ...rest } = desiredConfig
           desiredConfig = rest
         })
 
@@ -141,6 +141,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
 
   private async result (config: ServiceConfig, prompt: ServicePrompt, id?: string): Promise<ServiceProperties> {
     const response = {} as ServiceProperties
+    let abortMission: boolean
 
     // initiate empty names as their paths
     if (prompt.name === '') {
@@ -152,9 +153,8 @@ export default class ConfigCommand extends ConfigBaseCommand {
     }
 
     // if item with given name already exists prompt first
-    let overwritePrompt = true
     if (config?.[response?.name] && !id) {
-      overwritePrompt = await promptUser<boolean>({ type: 'Toggle', message: `Name "${response.name}" already exists in local configuration. Do you want to overwrite?` })
+      abortMission = !await promptUser<boolean>({ type: 'Toggle', message: `Name "${response.name}" already exists in local configuration. Do you want to overwrite?` })
     }
 
     // check if regular expression
@@ -186,7 +186,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
     response.file = prompt.file.split(RegexConstants.REGEX_SPLITTER)
 
     // abort mission on certain occasions, and return the prompt on the valid ones
-    if (overwritePrompt) {
+    if (!abortMission) {
       return response
     }
   }

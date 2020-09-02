@@ -62,7 +62,7 @@ export default class DockerCommand extends BaseCommand {
       required: true
     },
     {
-      name: 'service',
+      name: 'group',
       description: 'Limit the task with service group name.',
       default: DockerCommandConstants.ALL_SERVICES
     }
@@ -75,7 +75,7 @@ export default class DockerCommand extends BaseCommand {
     const { args, flags, argv } = this.parse(DockerCommand)
     // get services as rest of the arguments
     argv.splice(argv.indexOf(args.command), 1)
-    args.service = argv
+    args.group = argv
 
     // parse command
     this.tasks.ctx = { command: dockerCommandsAvailable[args.command] }
@@ -110,7 +110,7 @@ export default class DockerCommand extends BaseCommand {
           ctx.services = []
 
           // find matching services
-          let services = args.service.includes(DockerCommandConstants.ALL_SERVICES) ? Object.keys(ctx.config) : args.service
+          let services = args.group.includes(DockerCommandConstants.ALL_SERVICES) ? Object.keys(ctx.config) : args.group
 
           // create unique array of services
           services = services.filter(uniqueArrayFilter)

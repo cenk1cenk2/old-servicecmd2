@@ -19,6 +19,13 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
     description: [ 'Target a container directly in docker-compose file.' ]
   },
   {
+    name: DockerCommandFlagsWithLimitationTypes.COMMAND,
+    type: 'string',
+    argument: 'value-end',
+    useChar: true,
+    description: [ 'Always adds this command as the last argument.' ]
+  },
+  {
     name: DockerCommandFlagsWithLimitationTypes.NO_CACHE,
     type: 'boolean',
     argument: 'with-double',
@@ -47,13 +54,6 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
     type: 'boolean',
     argument: 'with-double',
     description: [ 'Remove containers for services not defined in the compose file.' ]
-  },
-  {
-    name: DockerCommandFlagsWithLimitationTypes.COMMAND,
-    type: 'string',
-    argument: 'value-end',
-    useChar: true,
-    description: [ 'Run a command.' ]
   }
 ]
 
