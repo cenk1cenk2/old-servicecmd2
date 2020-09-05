@@ -263,17 +263,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.2.10":
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.2.10.tgz#251bc29738b0595529f97a4df9a538cea699af58"
-  integrity sha512-XG29SY6BiW8MjQf/WdaeMBN8MsEBjRfpq23eLIEuEWiIFgaWmyLb/GC2EJO/HPUNy9OeAA2jM+QKCjm7PfiFdw==
+"@cenk1cenk2/boilerplate-oclif@^1.2.11":
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.2.11.tgz#3ee1679e97a5280bb1e19a578a69fd02c56d636d"
+  integrity sha512-tVrR0GMUusX6PB0gfnrntTq03Xf2mJFe9DFQBOM2qsUS6pBmbc7C4A6afa7Cug51M571TUF70VcR+SPN1cIyaw==
   dependencies:
     chalk "^4.1.0"
     config "^3.3.1"
     deepmerge "^4.2.2"
     figures "^3.2.0"
     object-path-immutable "^4.1.0"
-    table "^5.4.6"
+    table "^6.0.3"
     tslib "^2.0.1"
     types "^0.1.1"
     winston "^3.3.3"
@@ -8524,7 +8524,7 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-table@^5.2.3, table@^5.4.6:
+table@^5.2.3:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/table/-/table-5.4.6.tgz#1292d19500ce3f86053b05f0e8e7e4a3bb21079e"
   integrity sha512-wmEc8m4fjnob4gt5riFRtTu/6+4rSe12TpAELNSqHMfF3IqnA+CH37USM6/YR3qRZv7e56kAEAtd6nKZaxe0Ug==
@@ -8533,6 +8533,16 @@ table@^5.2.3, table@^5.4.6:
     lodash "^4.17.14"
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
+
+table@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/table/-/table-6.0.3.tgz#e5b8a834e37e27ad06de2e0fda42b55cfd8a0123"
+  integrity sha512-8321ZMcf1B9HvVX/btKv8mMZahCjn2aYrDlpqHaBFCfnox64edeH9kEid0vTLTRR8gWR2A20aDgeuTTea4sVtw==
+  dependencies:
+    ajv "^6.12.4"
+    lodash "^4.17.20"
+    slice-ansi "^4.0.0"
+    string-width "^4.2.0"
 
 tar-fs@^2.0.0:
   version "2.1.0"
