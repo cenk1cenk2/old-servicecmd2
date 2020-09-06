@@ -8,6 +8,9 @@
   "bin": {
     "servicecmd": "bin/run.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/cenk1cenk2/servicecmd",
   "scripts": {
     "start": "bin/run.js",

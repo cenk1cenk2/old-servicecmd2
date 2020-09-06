@@ -36,6 +36,7 @@ steps:
         from_secret: github_token
       npm_token:
         from_secret: npm_token
+      update_readme: true
     when:
       branch:
         - master

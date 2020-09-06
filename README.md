@@ -7,13 +7,7 @@
 
 A set of Node.js CLI tools that enables the users to manage and monitor multiple docker-compose stacks by grouping them in to folders and ability to filter them.
 
-# Plug-Ins
-
-> **WIP**
-
-This CLI is extendable with more functionality after installing the base [@servicecmd/cli](./packages/cli/README.md).
-
-# Packages
+# Base Package
 
 ## [@servicecmd/cli](./packages/cli/README.md)
 
@@ -22,6 +16,8 @@ This CLI is extendable with more functionality after installing the base [@servi
 This is the base of the @servicecmd. All other features will extend the capabilities of the default CLI.
 
 This CLI enables the user to proxy commands to multiple docker-compose stacks.
+
+# Plugins
 
 ## [@servicecmd/daemon](./packages/daemon/README.md)
 
