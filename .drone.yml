@@ -16,12 +16,12 @@ steps:
   - name: lint
     image: node:current-alpine
     commands:
-      - yarn command lint:check
+      - yarn command --scope "@servicecmd/cli" lint:check
 
   - name: build
     image: node:current-alpine
     commands:
-      - yarn command build --scope "@servicecmd/cli"
+      - yarn command --scope "@servicecmd/cli" build
 
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
