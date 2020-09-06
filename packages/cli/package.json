@@ -1,6 +1,6 @@
 {
   "name": "@servicecmd/cli",
-  "description": "Docker-Compose task manager and server monitor.",
+  "description": "Monitor and manage docker-compose stacks easily. This CLI enables the user to proxy commands to multiple docker-compose stacks.",
   "version": "1.0.0",
   "author": "Cenk Kilic <cenk@kilic.dev>",
   "main": "./dist/index.js",
@@ -69,7 +69,14 @@
   },
   "keywords": [
     "oclif",
-    "cenk1cenk2"
+    "cenk1cenk2",
+    "docker",
+    "docker-compose",
+    "task-manager",
+    "monitor",
+    "control",
+    "cli",
+    "command line interface"
   ],
   "license": "MIT",
   "dependencies": {
