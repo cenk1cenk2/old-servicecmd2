@@ -2,6 +2,12 @@
 
 [![Build Status](https://drone.kilic.dev/api/badges/cenk1cenk2/servicecmd/status.svg)](https://drone.kilic.dev/cenk1cenk2/servicecmd) [![Version](https://img.shields.io/npm/v/@servicecmd/cli.svg)](https://npmjs.org/package/@servicecmd/cli) [![Downloads/week](https://img.shields.io/npm/dw/@servicecmd/cli.svg)](https://npmjs.org/package/@servicecmd/cli) [![Dependencies](https://img.shields.io/librariesio/release/npm/@servicecmd/cli)](https://npmjs.org/package/@servicecmd/cli) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+![Demo](../../media/demo_servicecmd-cli.gif)
+
+This is the base of the @servicecmd. All other features will extend the capabilities of the default CLI.
+
+This CLI enables the user to proxy commands to multiple docker-compose stacks.
+
 - [Changelog](./CHANGELOG.md)
   <!-- toc -->
 
@@ -11,11 +17,25 @@
 * [Commands](#commands)
 <!-- tocstop -->
 
-# Description
+# Install
 
-This is the base of the @servicecmd. All other features will extend the capabilities of the default CLI.
+<!-- usage -->
 
-This CLI enables the user to proxy commands to multiple docker-compose stacks.
+```sh-session
+$ npm install -g @servicecmd/cli
+$ servicecmd COMMAND
+
+
+running command...
+$ servicecmd (-v|--version|version)
+@servicecmd/cli/1.0.0 linux-x64 node-v14.8.0
+$ servicecmd --help [COMMAND]
+USAGE
+  $ servicecmd COMMAND
+...
+```
+
+<!-- usagestop -->
 
 # Initial Setup
 
@@ -179,26 +199,6 @@ There is important flags you want to keep an eye on.
 | Remove  | Remove one or more entries in the configuration file. |
 | Delete  | Delete the local configuration file compeletely.      |
 | Import  | Import a configuration from a local file or HTTP.     |
-
-# Install
-
-<!-- usage -->
-
-```sh-session
-$ npm install -g @servicecmd/cli
-$ servicecmd COMMAND
-
-
-running command...
-$ servicecmd (-v|--version|version)
-@servicecmd/cli/1.0.0 linux-x64 node-v14.8.0
-$ servicecmd --help [COMMAND]
-USAGE
-  $ servicecmd COMMAND
-...
-```
-
-<!-- usagestop -->
 
 # Commands
 
