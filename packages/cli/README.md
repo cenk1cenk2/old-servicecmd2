@@ -20,6 +20,7 @@ This CLI enables the user to proxy commands to multiple docker-compose stacks.
 # Initial Setup
 
 - [Adding a new configuration](#Adding-a-new-configuration)
+- [Proxying Commands to Groups](#Proxying-Commands-to-Groups)
 
 ## Usage
 
