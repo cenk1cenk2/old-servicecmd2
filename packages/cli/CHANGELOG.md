@@ -1,3 +1,10 @@
+# [@servicecmd/cli-v1.0.3](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.2...@servicecmd/cli-v1.0.3) (2020-09-06)
+
+
+### Bug Fixes
+
+* **demo:** added demo image ([93d3e29](https://github.com/cenk1cenk2/servicecmd/commit/93d3e29db167af32925016c1de6e10029e0140b7))
+
 # [@servicecmd/cli-v1.0.2](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.1...@servicecmd/cli-v1.0.2) (2020-09-06)
 
 
