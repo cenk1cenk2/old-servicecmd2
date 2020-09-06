@@ -186,6 +186,8 @@ There is important flags you want to keep an eye on.
 ```sh-session
 $ npm install -g @servicecmd/cli
 $ servicecmd COMMAND
+
+
 running command...
 $ servicecmd (-v|--version|version)
 @servicecmd/cli/1.0.0 linux-x64 node-v14.8.0
