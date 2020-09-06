@@ -12,8 +12,8 @@ This CLI enables the user to proxy commands to multiple docker-compose stacks.
   <!-- toc -->
 
 * [@servicecmd/cli](#servicecmdcli)
-* [Description](#description)
-* [Usage](#usage)
+* [Install](#install)
+* [Initial Setup](#initial-setup)
 * [Commands](#commands)
 <!-- tocstop -->
 
@@ -24,11 +24,9 @@ This CLI enables the user to proxy commands to multiple docker-compose stacks.
 ```sh-session
 $ npm install -g @servicecmd/cli
 $ servicecmd COMMAND
-
-
 running command...
 $ servicecmd (-v|--version|version)
-@servicecmd/cli/1.0.0 linux-x64 node-v14.8.0
+@servicecmd/cli/1.0.0 linux-x64 node-v14.4.0
 $ servicecmd --help [COMMAND]
 USAGE
   $ servicecmd COMMAND
@@ -209,6 +207,11 @@ There is important flags you want to keep an eye on.
 - [`servicecmd config:docker`](#servicecmd-configdocker)
 - [`servicecmd docker`](#servicecmd-docker)
 - [`servicecmd help [COMMAND]`](#servicecmd-help-command)
+- [`servicecmd plugins`](#servicecmd-plugins)
+- [`servicecmd plugins:install PLUGIN...`](#servicecmd-pluginsinstall-plugin)
+- [`servicecmd plugins:link PLUGIN`](#servicecmd-pluginslink-plugin)
+- [`servicecmd plugins:uninstall PLUGIN...`](#servicecmd-pluginsuninstall-plugin)
+- [`servicecmd plugins:update`](#servicecmd-pluginsupdate)
 
 ## `servicecmd autocomplete [SHELL]`
 
@@ -270,7 +273,9 @@ USAGE
 
 OPTIONS
   -a, --args=args                                                              Always adds this as the last argument.
-                                                                               Works with commands: "exec"
+                                                                               Works with commands: "up, down, restart,
+                                                                               logs, kill, stop, exec, pull, build, ls,
+                                                                               ps, rm, top"
 
   -g, --group=group                                                            [default: all] Limit the task with
                                                                                service group name.
@@ -285,11 +290,11 @@ OPTIONS
 
   -p, --prompt                                                                 Prompt user before doing something.
 
-  -r, --run=up|down|logs|pull|build|ls|ps|exec|kill|restart|rm|top|stats|stop  (required) Execute the given command.
+  -r, --run=up|down|restart|logs|kill|stop|exec|pull|build|ls|ps|rm|top|stats  (required) Execute the given command.
 
   -t, --target=target                                                          Target a container directly in
                                                                                docker-compose file. Works with commands:
-                                                                               "logs, exec, kill, stop"
+                                                                               "logs, kill, stop, exec"
 
   --force-rm                                                                   Always remove intermediate containers.
                                                                                Works with commands: "build"
@@ -308,18 +313,11 @@ OPTIONS
 
   --remove-orphans                                                             Remove containers for services not
                                                                                defined in the compose file. Works with
-                                                                               commands: "down"
+                                                                               commands: "up, down"
 
   --rmi=all|local                                                              Remove containers for services not
                                                                                defined in the compose file. Works with
                                                                                commands: "down"
-
-EXAMPLE
-  ┌────────────────────┬─────────────┐
-  │ To Achieve         │ Run Command │
-  ├────────────────────┼─────────────┤
-  │ run ceration tasks │ asd         │
-  └────────────────────┴─────────────┘
 ```
 
 _See code: [dist/commands/docker/index.ts](https://github.com/cenk1cenk2/servicecmd/blob/v1.0.0/dist/commands/docker/index.ts)_
@@ -340,5 +338,122 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `servicecmd plugins`
+
+list installed plugins
+
+```
+USAGE
+  $ servicecmd plugins
+
+OPTIONS
+  --core  show core plugins
+
+EXAMPLE
+  $ servicecmd plugins
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/index.ts)_
+
+## `servicecmd plugins:install PLUGIN...`
+
+installs a plugin into the CLI
+
+```
+USAGE
+  $ servicecmd plugins:install PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to install
+
+OPTIONS
+  -f, --force    yarn install with force flag
+  -h, --help     show CLI help
+  -v, --verbose
+
+DESCRIPTION
+  Can be installed from npm or a git url.
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
+  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
+  the CLI without the need to patch and update the whole CLI.
+
+ALIASES
+  $ servicecmd plugins:add
+
+EXAMPLES
+  $ servicecmd plugins:install myplugin
+  $ servicecmd plugins:install https://github.com/someuser/someplugin
+  $ servicecmd plugins:install someuser/someplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/install.ts)_
+
+## `servicecmd plugins:link PLUGIN`
+
+links a plugin into the CLI for development
+
+```
+USAGE
+  $ servicecmd plugins:link PLUGIN
+
+ARGUMENTS
+  PATH  [default: .] path to plugin
+
+OPTIONS
+  -h, --help     show CLI help
+  -v, --verbose
+
+DESCRIPTION
+  Installation of a linked plugin will override a user-installed or core plugin.
+
+  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
+  command will override the user-installed or core plugin implementation. This is useful for development work.
+
+EXAMPLE
+  $ servicecmd plugins:link myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/link.ts)_
+
+## `servicecmd plugins:uninstall PLUGIN...`
+
+removes a plugin from the CLI
+
+```
+USAGE
+  $ servicecmd plugins:uninstall PLUGIN...
+
+ARGUMENTS
+  PLUGIN  plugin to uninstall
+
+OPTIONS
+  -h, --help     show CLI help
+  -v, --verbose
+
+ALIASES
+  $ servicecmd plugins:unlink
+  $ servicecmd plugins:remove
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/uninstall.ts)_
+
+## `servicecmd plugins:update`
+
+update installed plugins
+
+```
+USAGE
+  $ servicecmd plugins:update
+
+OPTIONS
+  -h, --help     show CLI help
+  -v, --verbose
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.9.0/src/commands/plugins/update.ts)_
 
 <!-- commandsstop -->
