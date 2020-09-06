@@ -1,10 +1,10 @@
-import { BaseCommand, LogLevels } from '@cenk1cenk2/boilerplate-oclif'
+import { BaseCommand, LogLevels, createTable } from '@cenk1cenk2/boilerplate-oclif'
 import { flags as Flags } from '@oclif/command'
-import { args as Args } from '@oclif/parser'
 import { IBooleanFlag, IOptionFlag } from '@oclif/parser/lib/flags'
 import execa from 'execa'
 import { WriteStream } from 'fs'
 import { Listr } from 'listr2'
+import { EOL } from 'os'
 import { dirname } from 'path'
 import through from 'through'
 
@@ -14,15 +14,27 @@ import { DockerCommandConstants, DockerCommandFlagsWithLimitationTypes, dockerCo
 import { DockerCommandCtx } from '@src/interfaces/commands/docker/index.interface'
 import { ConfigFileConstants } from '@src/interfaces/constants'
 import { findFilesInDirectory, getFolderName, groupFilesInFolders } from '@src/utils/file.util'
-import { uniqueArrayFilter } from '@utils/general.util'
+import { nullArrayValueFilter, uniqueArrayFilter } from '@utils/general.util'
 
 export default class DockerCommand extends BaseCommand {
   static description = 'Runs the designated command over the the intended services.'
-  static strict = false
-
-  static flags: Record<'limit' | 'ignore', IOptionFlag<string[]>> &
+  static flags: Record<'limit' | 'ignore' | 'group', IOptionFlag<string[]>> &
+  Record<'run', IOptionFlag<string>> &
   Record<'prompt', IBooleanFlag<boolean>> &
   Partial<Record<DockerCommandFlagsWithLimitationTypes, IOptionFlag<any> | IBooleanFlag<boolean>>> = {
+    run: Flags.string({
+      char: 'r',
+      multiple: false,
+      description: 'Execute the given command.',
+      options: Object.keys(dockerCommandsAvailable),
+      required: true
+    }),
+    group: Flags.string({
+      char: 'g',
+      multiple: true,
+      description: 'Limit the task with service group name.',
+      default: [ DockerCommandConstants.ALL_SERVICES ]
+    }),
     limit: Flags.string({
       char: 'l',
       multiple: true,
@@ -42,11 +54,13 @@ export default class DockerCommand extends BaseCommand {
       (o, s) => ({
         ...o,
         [s.name]: Flags[s.type]({
-          char: s.useChar ? s.name.charAt(0) as any: null,
+          char: s.useChar ? (s.name.charAt(0) as any) : null,
           description: [
             ...s.description,
-            `Works with commands: "${Object.entries(dockerCommandsAvailable).reduce((o, [ k, v ]) => v.limitedFlags?.includes(s.name) ? [ ...o, k ] : o, [])}"`
-          ].join('\n'),
+            `Works with commands: "${Object.entries(dockerCommandsAvailable)
+              .reduce((o, [ k, v ]) => v.limitedFlags?.includes(s.name) ? [ ...o, k ] : o, [])
+              .join(', ')}"`
+          ].join(' '),
           ...(s.options as any)
         })
       }),
@@ -54,37 +68,20 @@ export default class DockerCommand extends BaseCommand {
     )
   }
 
-  static args: Args.IArg[] = [
-    {
-      name: 'command',
-      description: 'Execute the given command.',
-      options: Object.keys(dockerCommandsAvailable),
-      required: true
-    },
-    {
-      name: 'group',
-      description: 'Limit the task with service group name.',
-      default: DockerCommandConstants.ALL_SERVICES
-    }
-  ]
-
   private deferred: (() => Promise<any>)[] = []
 
   async run (): Promise<void> {
     // get arguments
-    const { args, flags, argv } = this.parse(DockerCommand)
-    // get services as rest of the arguments
-    argv.splice(argv.indexOf(args.command), 1)
-    args.group = argv
+    const { flags } = this.parse(DockerCommand)
 
     // parse command
-    this.tasks.ctx = { command: dockerCommandsAvailable[args.command] }
+    this.tasks.ctx = { command: dockerCommandsAvailable[flags.run] }
 
     // check arguments
     await Promise.all(
       Object.values(DockerCommandFlagsWithLimitationTypes).map(async (f) => {
-        if (flags[f] && !dockerCommandsAvailable[args.command].limitedFlags?.includes(f)) {
-          throw new Error(`Specifiying a "${f}" flag is not available for command "${args.command}".`)
+        if (flags[f] && !dockerCommandsAvailable[flags.run].limitedFlags?.includes(f)) {
+          throw new Error(`Specifiying a "${f}" flag is not available for command "${flags.run}".`)
         }
       })
     )
@@ -110,7 +107,7 @@ export default class DockerCommand extends BaseCommand {
           ctx.services = []
 
           // find matching services
-          let services = args.group.includes(DockerCommandConstants.ALL_SERVICES) ? Object.keys(ctx.config) : args.group
+          let services = flags.group.includes(DockerCommandConstants.ALL_SERVICES) ? Object.keys(ctx.config) : flags.group
 
           // create unique array of services
           services = services.filter(uniqueArrayFilter)
@@ -147,7 +144,9 @@ export default class DockerCommand extends BaseCommand {
                   }
                 })
               )
-            ).flat()
+            )
+              .flat()
+              .filter(nullArrayValueFilter)
           }
 
           // filter depending on ignore
@@ -171,7 +170,24 @@ export default class DockerCommand extends BaseCommand {
           // parse services by grouping them in folders
           ctx.parsedServices = groupFilesInFolders(ctx.services)
 
+          // check required flags here
+          if (ctx.command.requireFlags?.length > 0) {
+            await Promise.all(
+              ctx.command.requireFlags.map(async (requiredFlag) => {
+                if (!flags[requiredFlag]) {
+                  throw new Error(`Flag "${requiredFlag}" is required when using it with run command "${flags.run}".`)
+                }
+              })
+            )
+          }
+
           // check limits here
+          if (ctx.command.limits?.services) {
+            // limit the service count
+            if (ctx.services.length > ctx.command.limits.services) {
+              throw new Error(`This command can only be applied to ${ctx.command.limits.services} while current filters match ${ctx.services.length} services.`)
+            }
+          }
 
           this.logger.debug('Applying on services:\n%o', ctx.parsedServices)
         },
@@ -181,6 +197,28 @@ export default class DockerCommand extends BaseCommand {
       },
 
       // prompt user before doing something if flag is specified
+      {
+        enabled: (): boolean => flags.prompt,
+        task: async (ctx, task): Promise<void> => {
+          task.output = createTable(
+            [ 'Command:', ctx.command.command ],
+            [
+              [ 'Folder', 'File' ],
+              ...Object.entries(ctx.parsedServices).map(([ folder, file ]) => {
+                return [ folder, file.join(EOL) ]
+              })
+            ]
+          )
+          const prompt = await task.prompt<boolean>({
+            type: 'Toggle',
+            message: 'Do you confirm the current command?'
+          })
+
+          if (!prompt) {
+            throw new Error('Cancelled execution.')
+          }
+        }
+      },
 
       // apply the command on services
       this.tasks.indent(
@@ -199,13 +237,45 @@ export default class DockerCommand extends BaseCommand {
                   title: f.replace(new RegExp(`${folder}/?`), ''),
                   task: async (ctx, task): Promise<void> => {
                     // parse arguments
-                    const args: string[] = []
-                    if (flags.target) {
-                      args.push(flags.target)
+                    const args: { start?: string[], middle?: string[], end?: string[] } = {
+                      start: [],
+                      middle: [],
+                      end: []
                     }
+                    await Promise.all(
+                      Object.keys(flags).map(async (flag) => {
+                        if (Object.values(DockerCommandFlagsWithLimitationTypes).includes(flag as any)) {
+                          const argument = dockerCommandFlagsWithLimitation.find((i) => i.name === flag)
+                          const value = flags[flag]
+
+                          switch (argument.argument) {
+                          case 'value-start':
+                            args.start.push(value)
+                            break
+                          case 'value-end':
+                            args.end.push(value)
+                            break
+                          case 'with-double':
+                            args.middle.push(`--${flag}`)
+                            break
+                          case 'with-single':
+                            args.middle.push(`-${flag}`)
+                            break
+                          case 'with-double-and-value':
+                            args.middle.push(`--${flag} ${value}`)
+                            break
+                          case 'with-single-and-value':
+                            args.middle.push(`-${flag} ${value}`)
+                            break
+                          default:
+                            throw new Error('Unknown or unhandled argument type.')
+                          }
+                        }
+                      })
+                    )
 
                     // create instance for command
-                    const instance = execa(ctx.command.command, [ ...args ], {
+                    const instance = execa(ctx.command.command, [ ...args.start, ...args.middle, ...args.end ], {
                       cwd: folder,
                       shell: true,
                       stdio: ctx.command.headless ? 'inherit' : 'pipe'
@@ -271,7 +341,7 @@ export default class DockerCommand extends BaseCommand {
           exitOnError: false,
           rendererOptions: { collapse: false }
         },
-        { title: `Executing "${args.command}" command for services.`, options: { showTimer: true } }
+        { title: `Executing "${flags.run}" command for services.`, options: { showTimer: true } }
       )
     ])
 

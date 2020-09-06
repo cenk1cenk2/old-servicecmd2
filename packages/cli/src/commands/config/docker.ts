@@ -2,6 +2,7 @@ import { ConfigBaseCommand, ConfigCommandChoices, ConfigRemove, ConfigTypes, cre
 import globby from 'globby'
 
 import { ServiceConfig, ServicePrompt, ServiceProperties } from '@context/config/services.interface'
+import { DockerCommandConstants } from '@interfaces/commands/docker/index.constants'
 import { ConfigFileConstants, RegexConstants } from '@interfaces/constants'
 import { findFilesInDirectory, findFilesInDirectoryWithServiceConfig } from '@utils/file.util'
 
@@ -124,6 +125,10 @@ export default class ConfigCommand extends ConfigBaseCommand {
     validateOptions = {
       log: true,
       ...validateOptions
+    }
+
+    if (response.name === DockerCommandConstants.ALL_SERVICES) {
+      return `Name of the group can not be same with the reserved name: ${DockerCommandConstants.ALL_SERVICES}`
     }
 
     const pattern = await findFilesInDirectory(response.path, response.file, options)

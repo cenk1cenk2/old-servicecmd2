@@ -7,7 +7,9 @@ export enum DockerCommandFlagsWithLimitationTypes {
   PARALLEL = 'parallel',
   FORCE_REMOVE = 'force-rm',
   REMOVE_ORPHANS = 'remove-orphans',
-  COMMAND = 'command'
+  ARGUMENTS = 'args',
+  RMI = 'rmi',
+  PRIVILEGED = 'privileged'
 }
 
 export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationInterface[] = [
@@ -19,11 +21,11 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
     description: [ 'Target a container directly in docker-compose file.' ]
   },
   {
-    name: DockerCommandFlagsWithLimitationTypes.COMMAND,
+    name: DockerCommandFlagsWithLimitationTypes.ARGUMENTS,
     type: 'string',
     argument: 'value-end',
     useChar: true,
-    description: [ 'Always adds this command as the last argument.' ]
+    description: [ 'Always adds this as the last argument.' ]
   },
   {
     name: DockerCommandFlagsWithLimitationTypes.NO_CACHE,
@@ -54,30 +56,70 @@ export const dockerCommandFlagsWithLimitation: DockerCommandFlagsWithLimitationI
     type: 'boolean',
     argument: 'with-double',
     description: [ 'Remove containers for services not defined in the compose file.' ]
+  },
+  {
+    name: DockerCommandFlagsWithLimitationTypes.RMI,
+    type: 'string',
+    argument: 'with-double',
+    description: [ 'Remove containers for services not defined in the compose file.' ],
+    options: {
+      options: [ 'all', 'local' ]
+    }
+  },
+  {
+    name: DockerCommandFlagsWithLimitationTypes.PRIVILEGED,
+    type: 'boolean',
+    argument: 'with-double',
+    description: [ 'Give extended privileges to the process.' ]
   }
 ]
 
 export const dockerCommandsAvailable: Record<string, DockerCommandsAvailableInterface> = {
   up: {
-    command: 'docker-compose up -d'
+    command: 'docker-compose up -d',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.REMOVE_ORPHANS ]
   },
   down: {
     command: 'docker-compose down',
-    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.REMOVE_ORPHANS ]
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.REMOVE_ORPHANS, DockerCommandFlagsWithLimitationTypes.RMI ]
+  },
+  restart: {
+    command: 'docker-compose restart',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ]
   },
   logs: {
     command: 'docker-compose logs -f',
     deffered: true,
-    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET ]
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.TARGET ]
+  },
+  kill: {
+    command: 'docker-compose kill',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.TARGET ],
+    requireFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET ]
+  },
+  stop: {
+    command: 'docker-compose stop',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.TARGET ]
+  },
+  exec: {
+    command: 'docker-compose exec',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET, DockerCommandFlagsWithLimitationTypes.ARGUMENTS, DockerCommandFlagsWithLimitationTypes.PRIVILEGED ],
+    requireFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET, DockerCommandFlagsWithLimitationTypes.ARGUMENTS ],
+    limits: {
+      services: 1
+    },
+    deffered: true,
+    headless: true
   },
   pull: {
-    command: 'docker-compose pull'
+    command: 'docker-compose pull',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ]
   },
   build: {
     command: 'docker-compose build',
     limitedFlags: [
+      DockerCommandFlagsWithLimitationTypes.ARGUMENTS,
       DockerCommandFlagsWithLimitationTypes.NO_CACHE,
-      DockerCommandFlagsWithLimitationTypes.PULL,
       DockerCommandFlagsWithLimitationTypes.PULL,
       DockerCommandFlagsWithLimitationTypes.PARALLEL,
       DockerCommandFlagsWithLimitationTypes.FORCE_REMOVE
@@ -85,17 +127,26 @@ export const dockerCommandsAvailable: Record<string, DockerCommandsAvailableInte
   },
   ls: {
     command: 'docker-compose config --services',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ],
     keepOutput: true
   },
   ps: {
     command: 'docker-compose ps --all',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ],
     keepOutput: true
   },
-  exec: {
-    command: 'docker-compose exec',
-    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.TARGET, DockerCommandFlagsWithLimitationTypes.COMMAND ],
-    deffered: true,
-    headless: true
+  rm: {
+    command: 'docker-compose rm --force --stop',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ]
+  },
+  top: {
+    command: 'docker-compose top',
+    limitedFlags: [ DockerCommandFlagsWithLimitationTypes.ARGUMENTS ],
+    keepOutput: true
+  },
+  stats: {
+    command: 'SERVICES=$(docker-compose ps -q) && [ ! -z "$SERVICES" ] && docker stats --no-stream $SERVICES || echo "No running services has been found."',
+    keepOutput: true
   }
 }
 
