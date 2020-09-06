@@ -23,6 +23,11 @@ steps:
     commands:
       - yarn command --scope "@servicecmd/cli" build
 
+  - name: generate-readme
+    image: node:current-alpine
+    commands:
+      - yarn command --scope "@servicecmd/cli" readme
+
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
     settings:
