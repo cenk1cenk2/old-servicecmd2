@@ -1,3 +1,10 @@
+# [@servicecmd/cli-v1.0.1](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.0...@servicecmd/cli-v1.0.1) (2020-09-06)
+
+
+### Bug Fixes
+
+* npm is dead retry ([80b40c1](https://github.com/cenk1cenk2/servicecmd/commit/80b40c1cc5ac682c0ec68887573180a2df724f7e))
+
 # @servicecmd/cli-v1.0.0 (2020-09-06)
 
 
