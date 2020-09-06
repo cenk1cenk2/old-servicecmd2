@@ -1,3 +1,10 @@
+# [@servicecmd/cli-v1.0.2](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.1...@servicecmd/cli-v1.0.2) (2020-09-06)
+
+
+### Bug Fixes
+
+* retry npm ([a48c152](https://github.com/cenk1cenk2/servicecmd/commit/a48c15297b85577c4c85da80eb77c9cbf3fb8db1))
+
 # [@servicecmd/cli-v1.0.1](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.0...@servicecmd/cli-v1.0.1) (2020-09-06)
 
 
