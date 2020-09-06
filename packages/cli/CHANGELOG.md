@@ -1,3 +1,10 @@
+# [@servicecmd/cli-v1.0.4](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.3...@servicecmd/cli-v1.0.4) (2020-09-06)
+
+
+### Bug Fixes
+
+* description and keywords ([65ddd47](https://github.com/cenk1cenk2/servicecmd/commit/65ddd4784425d992ff1769d599b342e0881689a9))
+
 # [@servicecmd/cli-v1.0.3](https://github.com/cenk1cenk2/servicecmd/compare/@servicecmd/cli-v1.0.2...@servicecmd/cli-v1.0.3) (2020-09-06)
 
 
