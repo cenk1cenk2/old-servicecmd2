@@ -298,15 +298,15 @@
     "@commitlint/load" "^9.1.2"
 
 "@cenk1cenk2/eslint-config@*":
-  version "0.4.9"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/eslint-config/-/eslint-config-0.4.9.tgz#4a5ff733791a5ada8fe8cf4c250560aac88a4489"
-  integrity sha512-XmNrL7vgP7f3xXwuJ39dc9OSXXLG6dWxsPMa7hglRRkIsnxBPVnzblfYaviARJHBHpiYq8IDJbtsjAjNrqGx2A==
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/eslint-config/-/eslint-config-0.4.10.tgz#778ce2ab108b795ffa8f9137f76d1069b35f15b0"
+  integrity sha512-GvwYr2trlA7Vn2sMRml08OrZ5JOAgoTrU45tXNm4cBO6auiQl33LiQzvJAn5j+2e66Cbn0HNEGgDKTIg7MRIMg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^3.10.1"
     "@typescript-eslint/parser" "^3.10.1"
     eslint-config-react "^1.1.7"
     eslint-plugin-import "^2.22.0"
-    eslint-plugin-react-hooks "^4.1.0"
+    eslint-plugin-react-hooks "^4.1.1"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -3713,7 +3713,7 @@ eslint-plugin-import@^2.22.0:
     resolve "^1.17.0"
     tsconfig-paths "^3.9.0"
 
-eslint-plugin-react-hooks@^4.1.0:
+eslint-plugin-react-hooks@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.1.1.tgz#b37e1ff622b7800cd673901de32db1103d48411d"
   integrity sha512-vFJNwsf4MLYS0lHYfz9LqxQ+GccYsGGeKPHDxgkIaKbAhNuTLnST+q44pt81MzJZyFU5K4XLF6WiCGv3Yb6tCg==
