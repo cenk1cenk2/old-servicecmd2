@@ -165,24 +165,26 @@ export default class ConfigCommand extends ConfigBaseCommand {
     // check if regular expression
     if (globby.hasMagic(prompt.path)) {
       response.path = prompt.path.split(RegexConstants.REGEX_SPLITTER)
-      response.regex = parseInt(
-        await promptUser<string>({
-          type: 'Input',
-          message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
-          initial: typeof config[id]?.regex === 'number' ? config[id]?.regex.toString() : '1',
-          validate: (value): Promise<boolean | string> | string => {
-            value = parseInt(value, 10)
-
-            if (!isNaN(value) && value >= 0) {
-              value = value > 0 ? value : Infinity
-              return this.validate(prompt, { deep: value }, { log: false })
-            }
-
-            return 'Search depth must be a positive number or 0 for disabling.'
+      response.regex = await promptUser<number>({
+        type: 'Input',
+        message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
+        initial: typeof config[id]?.regex === 'number' ? config[id]?.regex.toString() : '0',
+        validate: (value: string): Promise<boolean | string> | string => {
+          let parsedValue: number
+          if (value === '0') {
+            parsedValue = Infinity
+          } else {
+            parsedValue = parseInt(value, 10)
           }
-        }),
-        10
-      )
+
+          if (!isNaN(parsedValue) && parsedValue >= 0) {
+            return this.validate(prompt, { deep: parsedValue }, { log: false })
+          }
+
+          return 'Search depth must be a positive number or 0 for disabling.'
+        },
+        format: (value: string) => value === '0' ? Infinity : parseInt(value, 10)
+      })
     } else {
       response.path = [ prompt.path ]
       response.regex = false
