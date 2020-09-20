@@ -6051,21 +6051,7 @@ listr2@^2.6.0:
     rxjs "^6.6.2"
     through "^2.3.8"
 
-listr2@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.0.1.tgz#53f16cd137e998e482b29bb3a20f25b3de3c8518"
-  integrity sha512-IthBs6VAHARRLLoLwTCHsgR3FxywNTjLbdpOFisUD+MP6/bMAa54i9k/zudl1qSyvLcR3UzAwrFnyVczceqYfA==
-  dependencies:
-    chalk "^4.1.0"
-    cli-truncate "^2.1.0"
-    figures "^3.2.0"
-    indent-string "^4.0.0"
-    log-update "^4.0.0"
-    p-map "^4.0.0"
-    rxjs "^6.6.2"
-    through "^2.3.8"
-
-listr2@^3.1.0:
+listr2@^3.0.1, listr2@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.1.0.tgz#09841af305f7c3048c07851631b07b0cfaff1527"
   integrity sha512-JBw2DvFbeTrvQPmBQAhjLtfsAOi4ipCdaojGTDcWurNR6zUk3adeYpsCgOT6n/VNjmxkjrxQ1txYBGyTyRA4+A==
