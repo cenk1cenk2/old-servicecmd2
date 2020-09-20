@@ -6065,6 +6065,20 @@ listr2@^3.0.1:
     rxjs "^6.6.2"
     through "^2.3.8"
 
+listr2@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.1.0.tgz#09841af305f7c3048c07851631b07b0cfaff1527"
+  integrity sha512-JBw2DvFbeTrvQPmBQAhjLtfsAOi4ipCdaojGTDcWurNR6zUk3adeYpsCgOT6n/VNjmxkjrxQ1txYBGyTyRA4+A==
+  dependencies:
+    chalk "^4.1.0"
+    cli-truncate "^2.1.0"
+    figures "^3.2.0"
+    indent-string "^4.0.0"
+    log-update "^4.0.0"
+    p-map "^4.0.0"
+    rxjs "^6.6.3"
+    through "^2.3.8"
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
@@ -7989,7 +8003,7 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rxjs@^6.4.0, rxjs@^6.6.2:
+rxjs@^6.4.0, rxjs@^6.6.2, rxjs@^6.6.3:
   version "6.6.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
   integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
