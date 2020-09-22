@@ -6021,6 +6021,20 @@ listr2@^3.1.0:
     rxjs "^6.6.3"
     through "^2.3.8"
 
+listr2@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.1.1.tgz#08d2eb56a79bfe09e2bc90cb8650d3d58e2b911d"
+  integrity sha512-5HjYFP0FpG2dOuSAth2vQ172rWqI78746itLIvgg0KjHMAyW8CVNc9wzBzEo4/5UYfNbmT28u0J29NoA3W0z+Q==
+  dependencies:
+    chalk "^4.1.0"
+    cli-truncate "^2.1.0"
+    figures "^3.2.0"
+    indent-string "^4.0.0"
+    log-update "^4.0.0"
+    p-map "^4.0.0"
+    rxjs "^6.6.3"
+    through "^2.3.8"
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
