@@ -93,7 +93,7 @@
     "globby": "^11.0.1",
     "listr2": "^3.1.1",
     "through": "^2.3.8",
-    "tslib": "^2.0.2",
+    "tslib": "^2.0.3",
     "update-notifier": "^5.0.0"
   },
   "devDependencies": {
