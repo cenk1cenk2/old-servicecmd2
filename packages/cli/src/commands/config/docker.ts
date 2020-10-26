@@ -168,9 +168,7 @@ export default class ConfigCommand extends ConfigBaseCommand {
       const regex = await promptUser<string>({
         type: 'Input',
         message: 'This looks like a regular expression. Please set a depth to search for docker-compose files:',
-        initial: typeof config[id]?.regex === 'number' ?
-        config[id]?.regex === Infinity ? '0' : config[id]?.regex.toString() :
-          '0',
+        initial: typeof config[id]?.regex === 'number' ? config[id]?.regex === Infinity ? '0' : config[id]?.regex.toString() : '0',
         validate: (value): Promise<boolean | string> | string => {
           if (value === '0') {
             value = Infinity
