@@ -94,7 +94,7 @@
     "listr2": "^3.2.2",
     "through": "^2.3.8",
     "tslib": "^2.0.3",
-    "update-notifier": "^5.0.0"
+    "update-notifier": "^5.0.1"
   },
   "devDependencies": {
     "@cenk1cenk2/eslint-config": "*",
