@@ -306,9 +306,9 @@
     "@commitlint/load" "^11.0.0"
 
 "@cenk1cenk2/eslint-config@*":
-  version "0.4.20"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/eslint-config/-/eslint-config-0.4.20.tgz#4d06acbcf99cafa5bb14257adfcb092d2c95c9dd"
-  integrity sha512-kC2ehIuXuy6uMwmyvvg8hOo+PgUctMZIEyBHmkj3pdtlVJO3rR6Lfx9aNBnIzC5XKbwBM93ywyaGXdzC7Jd6qQ==
+  version "0.4.22"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/eslint-config/-/eslint-config-0.4.22.tgz#4039cd77ff8380733e6c3e39ce9bdf989dd192da"
+  integrity sha512-9MUIQHFPDRKTRjCsE+u6l6+lgiTuensQHhOl9z7SG8zsp3gaTXRDOzl8RBM8DwRR6DsT4BjVG8epRAXKYQ+yog==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.6.1"
     "@typescript-eslint/parser" "^4.6.1"
@@ -3743,9 +3743,9 @@ eslint-visitor-keys@^2.0.0:
   integrity sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==
 
 eslint@^7.12.1:
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.12.1.tgz#bd9a81fa67a6cfd51656cdb88812ce49ccec5801"
-  integrity sha512-HlMTEdr/LicJfN08LB3nM1rRYliDXOmfoO4vj39xN6BLpFzF00hbwBoqHk8UcJ2M/3nlARZWy/mslvGEuZFvsg==
+  version "7.13.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.13.0.tgz#7f180126c0dcdef327bfb54b211d7802decc08da"
+  integrity sha512-uCORMuOO8tUzJmsdRtrvcGq5qposf7Rw0LwkTJkoDbOycVQtQjmnhZSuLQnozLE4TmAzlMVV45eCHmQ1OpDKUQ==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@eslint/eslintrc" "^0.2.1"
