@@ -1483,10 +1483,10 @@
     widest-line "^3.1.0"
     wrap-ansi "^4.0.0"
 
-"@oclif/plugin-plugins@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-plugins/-/plugin-plugins-1.9.1.tgz#0a5db4281bb89ac8eaff7b134463a1531de809d0"
-  integrity sha512-/lE644CeLZ9ZNpDzHTKSadUtHjo86CbKZBazJiBEeH3LAzf90AeiX447slVByGIAHOglvPgWLKaTUGuWdF/iwQ==
+"@oclif/plugin-plugins@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-plugins/-/plugin-plugins-1.9.2.tgz#dcc7c3475a53081ba8e57dd7f2c9aa6ddd93696e"
+  integrity sha512-o5mBjRqGckJL7aRIFGRJx+8snIqdKEwMRBdmIfAa3qtw0DXQYmbKEE3sXBLnJWR2e96mMXnOYxfFcYf45tHz0A==
   dependencies:
     "@oclif/color" "^0.x"
     "@oclif/command" "^1.5.12"
