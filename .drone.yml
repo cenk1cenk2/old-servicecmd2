@@ -47,3 +47,6 @@ steps:
         - master
       event:
         - push
+
+image_pull_secrets:
+  - dockerconfigjson
