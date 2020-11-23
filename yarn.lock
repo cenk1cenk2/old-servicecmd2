@@ -271,17 +271,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.4.3.tgz#66ff80e2a14307edb9c25705ae7c043804e3c4e3"
-  integrity sha512-3OZcX49i76xPkgQhTce8QqcGHStS4U17H87Ekl8/2KsktsT9wA5hubKJfEAQB3AbiIst/LdxnWlnZgM4LVMYfA==
+"@cenk1cenk2/boilerplate-oclif@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.4.4.tgz#963fe70430c3cc24df68ba6e59ec2911088901c4"
+  integrity sha512-kbEWUU/4Dhg9TVX+ib2ECNtz0VkKOQOzd3UCKM+wTCUxemfGdIHzrKBnazI7fwaeJyTPaQFWrNgz7ugcxtnsaQ==
   dependencies:
     chalk "^4.1.0"
     config "^3.3.2"
     deepmerge "^4.2.2"
     figures "^3.2.0"
     object-path-immutable "^4.1.1"
-    table "^6.0.3"
+    table "^6.0.4"
     tslib "^2.0.3"
     types "^0.1.1"
     winston "^3.3.3"
@@ -8560,7 +8560,7 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
-table@^6.0.3:
+table@^6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/table/-/table-6.0.4.tgz#c523dd182177e926c723eb20e1b341238188aa0d"
   integrity sha512-sBT4xRLdALd+NFBvwOz8bw4b15htyythha+q+DVZqy2RS08PPC8O2sZFgJYEY7bJvbCFKccs+WIZ/cd+xxTWCw==
