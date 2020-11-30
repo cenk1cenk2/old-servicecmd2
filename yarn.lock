@@ -271,13 +271,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.5.1.tgz#67c798c63c9a3cee0d0dcadf371d77ac0d198750"
-  integrity sha512-2fLgxVd6CectxJY62KlFQtAgYB0TUMBf7qPmiCkHa5SoeZHicJvBmLK9pvelllqk4xS6Qz80Vw43KXxhTZLCSw==
+"@cenk1cenk2/boilerplate-oclif@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.5.2.tgz#541f48ed1e4c4a952f3d4d348758544d53f625e2"
+  integrity sha512-sq8018XQq0Pj2Ntp5pvH10GfTNpjAK6WCSjBnKH3LE5U3eBFdUaka+ExJ7+QpFjU6DHNr7CNXzcIuKGerNQyEA==
   dependencies:
     chalk "^4.1.0"
-    config "^3.3.2"
+    config "^3.3.3"
     deepmerge "^4.2.2"
     figures "^3.2.0"
     object-path-immutable "^4.1.1"
@@ -2946,7 +2946,7 @@ config-chain@^1.1.11:
     ini "^1.3.4"
     proto-list "~1.2.1"
 
-config@^3.3.2:
+config@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/config/-/config-3.3.3.tgz#d3c110fce543022c2fde28712e4f1b8440dee101"
   integrity sha512-T3RmZQEAji5KYqUQpziWtyGJFli6Khz7h0rpxDwYNjSkr5ynyTWwO7WpfjHzTXclNCDfSWQRcwMb+NwxJesCKw==
