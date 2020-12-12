@@ -286,10 +286,10 @@
     winston "^3.3.3"
     yaml "^1.10.0"
 
-"@cenk1cenk2/cz-cc@^1.2.8":
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.2.8.tgz#31ad090d262721dbdec24e5be75576369e6df2cf"
-  integrity sha512-RdrIRKOQ0poB4aTUHOImuFW4yS6WIaMDYjgameIARi/bR3BUmYn9Cex1+ugTBte2KueG9AxoOSInifyK2OD/Xw==
+"@cenk1cenk2/cz-cc@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.3.0.tgz#59299a2d511843ebd8f4c3e093c8364352707daa"
+  integrity sha512-np65mGJ84cLL9iSPBGVQdvIqnX/ex6WAnhVkT4FcPXVQ+E2XIS33iHuJNFfduY6AkhaDo4ELFrT3mkv1og4qeA==
   dependencies:
     chalk "^4.1.0"
     commitizen "^4.2.2"
