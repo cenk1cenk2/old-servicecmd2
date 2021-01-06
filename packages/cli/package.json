@@ -90,10 +90,10 @@
     "enquirer": "^2.3.6",
     "execa": "^5.0.0",
     "fs-extra": "^9.0.1",
-    "globby": "^11.0.1",
+    "globby": "^11.0.2",
     "listr2": "^3.2.3",
     "through": "^2.3.8",
-    "tslib": "^2.0.3",
+    "tslib": "^2.1.0",
     "update-notifier": "^5.0.1"
   },
   "devDependencies": {
