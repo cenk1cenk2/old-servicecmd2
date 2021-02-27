@@ -91,7 +91,7 @@
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "globby": "^11.0.2",
-    "listr2": "^3.3.3",
+    "listr2": "^3.3.4",
     "through": "^2.3.8",
     "tslib": "^2.1.0",
     "update-notifier": "^5.1.0"
