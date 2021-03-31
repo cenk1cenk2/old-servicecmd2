@@ -79,7 +79,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@cenk1cenk2/boilerplate-oclif": "^1.6.1",
+    "@cenk1cenk2/boilerplate-oclif": "^1.6.2",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/errors": "^1.3.4",
@@ -91,7 +91,7 @@
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",
     "globby": "^11.0.3",
-    "listr2": "^3.4.3",
+    "listr2": "^3.4.4",
     "through": "^2.3.8",
     "tslib": "^2.1.0",
     "update-notifier": "^5.1.0"
