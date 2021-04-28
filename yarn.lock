@@ -294,17 +294,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cenk1cenk2/boilerplate-oclif@^1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.6.3.tgz#cf5654fed5845cdd34b0bb6038308d3581190b50"
-  integrity sha512-mbkqqrB3ujWxAFuV+p5mAfo1YXYxfHpFie29HH9iu1FtNGKkFAvmLpNkcW/K88cl+O+Z1e4kvLCIRHzga/0IyA==
+"@cenk1cenk2/boilerplate-oclif@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.7.1.tgz#2fcf9432182bee7c43d001f1cb76632a8390f4f1"
+  integrity sha512-91WTfF3GTDMF8c0ww6hwiznAOp6ngy5NG6P50HBrIrJqO3zfSq+hgwBxnVxSm3xXKV+5uELzZjEe2uphThNe4A==
   dependencies:
-    chalk "^4.1.0"
+    chalk "^4.1.1"
     config "^3.3.6"
     deepmerge "^4.2.2"
     figures "^3.2.0"
     object-path-immutable "^4.1.1"
-    table "^6.1.0"
+    table "^6.6.0"
     tslib "^2.2.0"
     types "^0.1.1"
     winston "^3.3.3"
@@ -8542,7 +8542,7 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-table@^6.0.4, table@^6.1.0:
+table@^6.0.4, table@^6.6.0:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/table/-/table-6.6.0.tgz#905654b79df98d9e9a973de1dd58682532c40e8e"
   integrity sha512-iZMtp5tUvcnAdtHpZTWLPF0M7AgiQsURR2DwmxnJwSy8I3+cY+ozzVvYha3BOLG2TB+L0CqjIz+91htuj6yCXg==
