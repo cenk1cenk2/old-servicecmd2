@@ -310,10 +310,10 @@
     winston "^3.3.3"
     yaml "^1.10.2"
 
-"@cenk1cenk2/cz-cc@^1.3.21":
-  version "1.3.21"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.3.21.tgz#90a796bd63b723e57f67569b3e265913aea75b56"
-  integrity sha512-DhTujIqzbKugtQmQYoY4BxrT6X50ezSh4DG38p+Z+yh6LpJwcxENVB1160TNT34vP6CeUDUT+qy6d8/llnZlpw==
+"@cenk1cenk2/cz-cc@^1.3.22":
+  version "1.3.22"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.3.22.tgz#64971b5fdb5df00dc6ca4b3afc6da8869734e94a"
+  integrity sha512-enc0DlL9PZiQQ1JRB2VTB5JJAP2VEbCtYkF0lp82jFh4DmyNS0oxQBqMg1WJMDCmKsu77n8OsPnFQeeDZZZ9uw==
   dependencies:
     chalk "^4.1.1"
     commitizen "^4.2.4"
@@ -322,7 +322,7 @@
     enquirer-editor "^1.0.0"
     enquirer-prompt-editor "^2.0.1"
     find-git-root "^1.0.4"
-    listr2 "^3.8.2"
+    listr2 "^3.8.3"
     lodash.map "^4.6.0"
     word-wrap "^1.2.3"
   optionalDependencies:
