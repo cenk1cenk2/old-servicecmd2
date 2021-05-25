@@ -310,10 +310,10 @@
     winston "^3.3.3"
     yaml "^1.10.2"
 
-"@cenk1cenk2/cz-cc@^1.3.22":
-  version "1.3.22"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.3.22.tgz#64971b5fdb5df00dc6ca4b3afc6da8869734e94a"
-  integrity sha512-enc0DlL9PZiQQ1JRB2VTB5JJAP2VEbCtYkF0lp82jFh4DmyNS0oxQBqMg1WJMDCmKsu77n8OsPnFQeeDZZZ9uw==
+"@cenk1cenk2/cz-cc@^1.3.23":
+  version "1.3.23"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/cz-cc/-/cz-cc-1.3.23.tgz#fef7dad03b1fa93b5603f6b5f9832bdf1bf732d5"
+  integrity sha512-cahRm4qt57gr0rBVEv6LIJrNABQ8WkyX4WRDoxzC0CSGZnzZ3F2fAIUyic8UUWvDmFbxpGYgvf5apptoaLKutw==
   dependencies:
     chalk "^4.1.1"
     commitizen "^4.2.4"
@@ -322,7 +322,7 @@
     enquirer-editor "^1.0.0"
     enquirer-prompt-editor "^2.0.1"
     find-git-root "^1.0.4"
-    listr2 "^3.8.3"
+    listr2 "^3.8.4"
     lodash.map "^4.6.0"
     word-wrap "^1.2.3"
   optionalDependencies:
@@ -5994,7 +5994,7 @@ lint-staged@^11.0.0:
     string-argv "0.3.1"
     stringify-object "^3.3.0"
 
-listr2@^3.8.2, listr2@^3.8.3:
+listr2@^3.8.2:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.8.3.tgz#531f86870440172accd078ca4ebf4870ff5d850e"
   integrity sha512-2NUXrFxPeccawyOpJXfUuV7FmKG4ummQjY+ByPkhTFJ5dVxU9EQbLh0PzaNSXlgbIK7Kmam18oz+ev8sbukzBA==
