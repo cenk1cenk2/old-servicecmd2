@@ -86,7 +86,7 @@
     "@oclif/plugin-autocomplete": "^0.3.0",
     "@oclif/plugin-help": "^3.2.2",
     "@oclif/plugin-plugins": "^1.10.0",
-    "@tiagonapoli/oclif-plugin-spaced-commands": "^0.0.6",
+    "@tiagonapoli/oclif-plugin-spaced-commands": "^1.0.1",
     "enquirer": "^2.3.6",
     "execa": "^5.0.0",
     "fs-extra": "^9.1.0",

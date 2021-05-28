@@ -1621,14 +1621,15 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@tiagonapoli/oclif-plugin-spaced-commands@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@tiagonapoli/oclif-plugin-spaced-commands/-/oclif-plugin-spaced-commands-0.0.6.tgz#c1fef84cd4066b75871ea5405f44f2efbd680151"
-  integrity sha512-3CLDT46LQsXU+O0UpE/FG7FtdG8HOtOK8HyIzcdxJ/CY4dRDRX+BH0zWNqVprCh1DV/fcm7TrLA3X2FIJhj7UQ==
+"@tiagonapoli/oclif-plugin-spaced-commands@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@tiagonapoli/oclif-plugin-spaced-commands/-/oclif-plugin-spaced-commands-1.0.1.tgz#6d35a948172a34dd489657c41dec65a1590197b3"
+  integrity sha512-gmDJMCH/48aMNlSvudhc/65x7jI8NqgsXdsTGwVDzaTe10qVUb1dsntY1tvsY3ttj/sZ3V6lwO+L7u/Nr1nLEw==
   dependencies:
     "@oclif/command" "^1.0.0"
     "@oclif/config" "^1.0.0"
     "@oclif/errors" "^1.2.2"
+    "@types/treeify" "^1.0.0"
     chalk "^2.4.1"
     indent-string "^3.2.0"
     strip-ansi "^5.0.0"
@@ -1812,6 +1813,11 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
+
+"@types/treeify@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/treeify/-/treeify-1.0.0.tgz#f04743cb91fc38254e8585d692bd92503782011c"
+  integrity sha512-ONpcZAEYlbPx4EtJwfTyCDQJGUpKf4sEcuySdCVjK5Fj/3vHp5HII1fqa1/+qrsLnpYELCQTfVW/awsGJePoIg==
 
 "@types/update-notifier@^5.0.0":
   version "5.0.0"
