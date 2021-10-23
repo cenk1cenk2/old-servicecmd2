@@ -6091,19 +6091,6 @@ listr2@^3.12.2:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
-listr2@^3.13.0:
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.13.0.tgz#6a320803401d2b2503974d386a802dc4eb9f2e2e"
-  integrity sha512-3BplcPqzZOSBMiIjKvRMJ/O4PmOf3JiHUXSrqC9NidkXkxn4Su5saHOuUstEaOfzFy//vxxcbOzhq0ZTw1CuTg==
-  dependencies:
-    cli-truncate "^2.1.0"
-    colorette "^2.0.16"
-    log-update "^4.0.0"
-    p-map "^4.0.0"
-    rxjs "^6.6.7"
-    through "^2.3.8"
-    wrap-ansi "^7.0.0"
-
 listr2@^3.13.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/listr2/-/listr2-3.13.1.tgz#816e8c1728d50f223795f530d72d248c7fa14602"
