@@ -88,7 +88,7 @@
     "@oclif/plugin-plugins": "^1.10.11",
     "@tiagonapoli/oclif-plugin-spaced-commands": "^1.0.1",
     "enquirer": "^2.3.6",
-    "execa": "^5.1.1",
+    "execa": "^6.1.0",
     "fs-extra": "^9.1.0",
     "globby": "^11.1.0",
     "listr2": "^3.14.0",
